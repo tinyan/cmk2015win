@@ -43,9 +43,18 @@
 
 #include "mode.h"
 
-#include "gameTitle.h"
+#include "hexarea.h"
+#include "putPeople.h"
+
+//#include "gameTitle.h"
 #include "play.h"
-#include "nekopic.h"
+#include "gameTitle.h"
+
+#include "editDeck.h"
+#include "loadDeck.h"
+#include "saveDeck.h"
+
+//#include "nekopic.h"
 
 #include "game.h"
 
@@ -67,8 +76,11 @@ void CGame::Create(void)
 {
 	if (CheckDebugOk()) SetDebugFlag();
 
-	LPSTR saveFolder = CMySaveFolder::GetFullFolder();
+	m_hexArea = new CHexArea();
+	m_putPeople = new CPutPeople();
 
+	LPSTR saveFolder = CMySaveFolder::GetFullFolder();
+/*
 	char filename[1024];
 	wsprintf(filename,"%s\\stageclear.sav",saveFolder);
 
@@ -90,10 +102,9 @@ void CGame::Create(void)
 		SetSaveData(0,0);//create and save
 	}
 
-
+	*/
 
 	CreateAllClass();
-
 
 	SetOption(FALSE);
 	StartInitialMessage();
@@ -107,7 +118,10 @@ CGame::~CGame()
 
 void CGame::End(void)
 {
+	ENDDELETECLASS(m_putPeople);
+	ENDDELETECLASS(m_hexArea);
 }
+
 
 
 
@@ -154,7 +168,13 @@ void CGame::CreateAllClass(void)
 
 
 //	m_general[GAMETITLE_MODE] = new CGameTitle(this);
-//	m_general[PLAY_MODE] = new CPlay(this);
+	m_general[PLAY_MODE] = new CPlay(this);
+	m_general[GAMETITLE_MODE] = new CGameTitle(this);
+	m_general[EDITDECK_MODE] = new CEditDeck(this);
+	m_general[LOADDECK_MODE] = new CLoadDeck(this);
+	m_general[SAVEDECK_MODE] = new CSaveDeck(this);
+
+
 //	m_general[NEKOPIC_MODE] = new CNekoPic(this);
 
 

@@ -83,13 +83,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="battleStatus.cpp" />
+    <ClCompile Include="editDeck.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gameTitle.cpp" />
+    <ClCompile Include="hexarea.cpp" />
+    <ClCompile Include="loadDeck.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="play.cpp" />
+    <ClCompile Include="putCard.cpp" />
+    <ClCompile Include="putChara.cpp" />
+    <ClCompile Include="putPeople.cpp" />
+    <ClCompile Include="saveDeck.cpp" />
+    <ClCompile Include="selectDeck.cpp" />
+    <ClCompile Include="unit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="battleStatus.h" />
+    <ClInclude Include="editDeck.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gameTitle.h" />
+    <ClInclude Include="hexarea.h" />
+    <ClInclude Include="loadDeck.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mode.h" />
+    <ClInclude Include="play.h" />
+    <ClInclude Include="putCard.h" />
+    <ClInclude Include="putChara.h" />
+    <ClInclude Include="putPeople.h" />
+    <ClInclude Include="saveDeck.h" />
+    <ClInclude Include="selectDeck.h" />
+    <ClInclude Include="unit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

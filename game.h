@@ -10,6 +10,7 @@
 
 class CCommonSystemFile;
 class CNameList;
+class CPutPeople;
 
 //class CMakeParty;
 //class CPartyStatusList;
@@ -44,12 +45,13 @@ class CNameList;
 //class CCastleLevel;
 
 class CGameCallBack;
+class CHexArea;
 
 class CGame : public CGameCallBack
 {
 public:
 	CGame(HWND hwnd, HINSTANCE hinstance, CCommonSystemFile* lpSystemFile, int windowSizeX, int windowSizeY, int bpp);
-	~CGame();
+	virtual ~CGame();
 	void End(void);
 
 
@@ -71,12 +73,18 @@ public:
 
 	int GetSelectedStage(void){return m_selectedStage;}
 	void SetSelectedStage(int stage){m_selectedStage = stage;}
+	CHexArea* GetHexArea(void){return m_hexArea;}
+	CPutPeople* GetPutPeople(void){return m_putPeople;}
 
 private:
 	void CreateAllClass(void);
 //	void AfterInitNewGame(int uraMode = 0, BOOL demoFlag = FALSE);
 
 	BOOL CheckDebugOk(void);
+
+	CHexArea* m_hexArea;
+	CPutPeople* m_putPeople;
+
 
 	int m_selectedStage;
 

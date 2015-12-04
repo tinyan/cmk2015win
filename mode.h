@@ -8,8 +8,14 @@
 
 #define GAMETITLE_MODE 51
 #define PLAY_MODE 52
+#define EDITDECK_MODE 53
 
-#define NEKOPIC_MODE 53
+
+#define SELECTDECK_MODE 60
+#define LOADDECK_MODE 61
+#define SAVEDECK_MODE 62
+
+
 
 
 //#define RPGBATTLE_MODE 51

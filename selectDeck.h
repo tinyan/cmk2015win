@@ -1,7 +1,7 @@
 
 
-#if !defined __CMK2008SUMMER_PLAY__
-#define __CMK2008SUMMER_PLAY__
+#if !defined __CMK2015WIN_SELECTDECK__
+#define __CMK2015WIN_SELECTDECK__
 
 
 class CCommonGeneral;
@@ -9,15 +9,13 @@ class CGame;
 class CPicture;
 
 class CMyMessage;
-
 class CNameList;
-class CPutPeople;
 
-class CPlay : public CCommonGeneral
+class CSelectDeck : public CCommonGeneral
 {
 public:
-	CPlay(CGame* lpGame);
-	~CPlay();
+	CSelectDeck(CGame* lpGame);
+	~CSelectDeck();
 	void End(void);
 
 	int Init(void);
@@ -31,7 +29,6 @@ private:
 	CGame* m_game2;
 	CMyMessage* m_message;
 
-	CPutPeople* m_putPeople;
 
 };
 
