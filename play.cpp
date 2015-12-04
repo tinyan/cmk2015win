@@ -96,7 +96,10 @@ int CPlay::Calcu(void)
 
 	POINT pt = m_mouseStatus->GetZahyo();
 
-
+	if (m_mouseStatus->CheckClick(1))
+	{
+		return ReturnFadeOut(GAMETITLE_MODE);
+	}
 
 
 

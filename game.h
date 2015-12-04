@@ -11,6 +11,7 @@
 class CCommonSystemFile;
 class CNameList;
 class CPutPeople;
+class CHaveCard;
 
 //class CMakeParty;
 //class CPartyStatusList;
@@ -75,7 +76,7 @@ public:
 	void SetSelectedStage(int stage){m_selectedStage = stage;}
 	CHexArea* GetHexArea(void){return m_hexArea;}
 	CPutPeople* GetPutPeople(void){return m_putPeople;}
-
+	CHaveCard* GetHaveCard(void){return m_haveCard;}
 private:
 	void CreateAllClass(void);
 //	void AfterInitNewGame(int uraMode = 0, BOOL demoFlag = FALSE);
@@ -85,6 +86,7 @@ private:
 	CHexArea* m_hexArea;
 	CPutPeople* m_putPeople;
 
+	CHaveCard* m_haveCard;
 
 	int m_selectedStage;
 

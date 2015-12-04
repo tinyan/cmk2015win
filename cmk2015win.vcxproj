@@ -84,9 +84,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="battleStatus.cpp" />
+    <ClCompile Include="cardList.cpp" />
+    <ClCompile Include="deckData.cpp" />
     <ClCompile Include="editDeck.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameTitle.cpp" />
+    <ClCompile Include="haveCard.cpp" />
     <ClCompile Include="hexarea.cpp" />
     <ClCompile Include="loadDeck.cpp" />
     <ClCompile Include="main.cpp" />
@@ -100,9 +103,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="battleStatus.h" />
+    <ClInclude Include="cardList.h" />
+    <ClInclude Include="deckData.h" />
     <ClInclude Include="editDeck.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameTitle.h" />
+    <ClInclude Include="haveCard.h" />
     <ClInclude Include="hexarea.h" />
     <ClInclude Include="loadDeck.h" />
     <ClInclude Include="main.h" />

@@ -45,6 +45,7 @@
 
 #include "hexarea.h"
 #include "putPeople.h"
+#include "haveCard.h"
 
 //#include "gameTitle.h"
 #include "play.h"
@@ -76,10 +77,24 @@ void CGame::Create(void)
 {
 	if (CheckDebugOk()) SetDebugFlag();
 
+	LPSTR saveFolder = CMySaveFolder::GetFullFolder();
+
 	m_hexArea = new CHexArea();
 	m_putPeople = new CPutPeople();
 
-	LPSTR saveFolder = CMySaveFolder::GetFullFolder();
+	m_haveCard = new CHaveCard();
+	if (!(m_haveCard->Load()))
+	{
+		for (int i=1;i<=40;i++)
+		{
+			m_haveCard->SetCard(i,4);
+		}
+		m_haveCard->Save();
+	}
+
+
+
+
 /*
 	char filename[1024];
 	wsprintf(filename,"%s\\stageclear.sav",saveFolder);
@@ -118,6 +133,7 @@ CGame::~CGame()
 
 void CGame::End(void)
 {
+	ENDDELETECLASS(m_haveCard);
 	ENDDELETECLASS(m_putPeople);
 	ENDDELETECLASS(m_hexArea);
 }

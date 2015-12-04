@@ -11,6 +11,9 @@ class CPicture;
 class CMyMessage;
 class CNameList;
 
+class CMenuButtonSetup;
+class CMenuButtonGroup;
+
 class CGameTitle : public CCommonGeneral
 {
 public:
@@ -29,6 +32,10 @@ private:
 	CGame* m_game2;
 	CMyMessage* m_message;
 
+	int m_basicButtonKosuu;
+
+	CMenuButtonSetup* m_menuButtonSetup;
+	CMenuButtonGroup* m_menu;
 
 };
 
