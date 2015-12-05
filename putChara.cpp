@@ -42,8 +42,8 @@ void CPutChara::Put(int x,int y,int nx,int ny)
 {
 	if ((nx>=0) && (ny>=0) && (nx < m_blockX) && (ny<m_blockY))
 	{
-		int srcY = m_sizeX * nx;
-		int srcX = m_sizeY * ny;
+		int srcX = m_sizeX * nx;
+		int srcY = m_sizeY * ny;
 		m_pic->Blt(x-m_sizeX/2,y-m_sizeY/2,srcX,srcY,m_sizeX,m_sizeY,TRUE);
 	}
 }
@@ -59,8 +59,8 @@ void CPutChara::TransPut(int x,int y,int nx,int ny,int ps)
 {
 	if ((nx>=0) && (ny>=0) && (nx < m_blockX) && (ny<m_blockY))
 	{
-		int srcY = m_sizeX * nx;
-		int srcX = m_sizeY * ny;
+		int srcX = m_sizeX * nx;
+		int srcY = m_sizeY * ny;
 		m_pic->TransLucentBlt2(x-m_sizeX/2,y-m_sizeY/2,srcX,srcY,m_sizeX,m_sizeY,ps);
 	}
 }

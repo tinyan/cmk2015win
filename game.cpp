@@ -43,9 +43,12 @@
 
 #include "mode.h"
 
+#include "cardList.h"
 #include "hexarea.h"
 #include "putPeople.h"
 #include "haveCard.h"
+#include "deckData.h"
+#include "putCard.h"
 
 //#include "gameTitle.h"
 #include "play.h"
@@ -79,19 +82,29 @@ void CGame::Create(void)
 
 	LPSTR saveFolder = CMySaveFolder::GetFullFolder();
 
+	m_cardList = new CCardList();
 	m_hexArea = new CHexArea();
 	m_putPeople = new CPutPeople();
+	m_putCard = new CPutCard(m_cardList);
 
 	m_haveCard = new CHaveCard();
 	if (!(m_haveCard->Load()))
 	{
-		for (int i=1;i<=40;i++)
+		if (m_haveCard->Load(TRUE))
 		{
-			m_haveCard->SetCard(i,4);
+			m_haveCard->Save();
 		}
-		m_haveCard->Save();
 	}
 
+	m_deckNumber = 0;
+	m_deckData = new CDeckData(0);
+	if (!(m_deckData->Load(0)))
+	{
+		if (m_deckData->Load(0,TRUE))
+		{
+			m_deckData->Save(0);
+		}
+	}
 
 
 
@@ -133,9 +146,12 @@ CGame::~CGame()
 
 void CGame::End(void)
 {
+	ENDDELETECLASS(m_deckData);
 	ENDDELETECLASS(m_haveCard);
+	ENDDELETECLASS(m_putCard);
 	ENDDELETECLASS(m_putPeople);
 	ENDDELETECLASS(m_hexArea);
+	ENDDELETECLASS(m_cardList);
 }
 
 

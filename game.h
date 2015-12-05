@@ -12,6 +12,9 @@ class CCommonSystemFile;
 class CNameList;
 class CPutPeople;
 class CHaveCard;
+class CCardList;
+class CDeckData;
+class CPutCard;
 
 //class CMakeParty;
 //class CPartyStatusList;
@@ -72,23 +75,31 @@ public:
 	int GetSaveData(int n);
 	void SetSaveData(int n,int d);
 
-	int GetSelectedStage(void){return m_selectedStage;}
-	void SetSelectedStage(int stage){m_selectedStage = stage;}
+//	int GetSelectedStage(void){return m_selectedStage;}
+//	void SetSelectedStage(int stage){m_selectedStage = stage;}
 	CHexArea* GetHexArea(void){return m_hexArea;}
 	CPutPeople* GetPutPeople(void){return m_putPeople;}
 	CHaveCard* GetHaveCard(void){return m_haveCard;}
+	CCardList* GetCardList(void){return m_cardList;}
+	CDeckData* GetDeckData(void){return m_deckData;}
+	CPutCard* GetPutCard(void){return m_putCard;}
+
 private:
 	void CreateAllClass(void);
 //	void AfterInitNewGame(int uraMode = 0, BOOL demoFlag = FALSE);
 
 	BOOL CheckDebugOk(void);
 
+	CCardList* m_cardList;
 	CHexArea* m_hexArea;
 	CPutPeople* m_putPeople;
 
 	CHaveCard* m_haveCard;
+	CDeckData* m_deckData;
+	CPutCard* m_putCard;
 
-	int m_selectedStage;
+//	int m_selectedStage;
+	int m_deckNumber;
 
 	int m_saveData[256];
 };

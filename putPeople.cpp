@@ -34,7 +34,7 @@ void CPutPeople::Put(int x,int y,int type,int pic,int houkou)
 {
 	int anime = 0;
 
-	m_people[type]->Put(x,y,pic,anime);
+	m_people[type]->Put(x,y,anime,pic);
 }
 
 

@@ -7,13 +7,15 @@
 #include "..\..\systemNNN\nyanlib\include\allGeo.h"
 #include "..\..\systemNNN\nyanlib\include\allGraphics.h"
 
+#include "cardList.h"
 #include "putChara.h"
 
 #include "putCard.h"
 
 
-CPutCard::CPutCard()
+CPutCard::CPutCard(CCardList* cardList)
 {
+	m_cardList = cardList;
 	m_seatMax = 16;
 	for (int i=0;i<m_seatMax;i++)
 	{
@@ -22,7 +24,7 @@ CPutCard::CPutCard()
 
 	m_card[0] = new CPutChara("sys\\cardseat0",4,4);
 
-	m_miniCard = new CPutChara("sys\\minicard",8,8);
+	m_miniCard = new CPutChara("sys\\ta_minicardseat",16,16);
 
 }
 

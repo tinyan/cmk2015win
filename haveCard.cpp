@@ -14,6 +14,7 @@ CHaveCard::CHaveCard()
 {
 	m_listMax = 256;
 	m_data = new int[m_listMax];
+	m_cardList = new int[m_listMax];
 	ClearList();
 }
 
@@ -25,6 +26,8 @@ CHaveCard::~CHaveCard()
 
 void CHaveCard::End(void)
 {
+	DELETEARRAY(m_cardList);
+	DELETEARRAY(m_data);
 }
 
 void CHaveCard::ClearList(void)
@@ -53,17 +56,54 @@ int CHaveCard::GetCard(int card)
 	return 0;
 }
 
+int CHaveCard::CalcuCardList(void)
+{
+	m_cardListNumber = 0;
+	for (int i=0;i<m_listMax;i++)
+	{
+		if (m_data[i] > 0)
+		{
+			m_cardList[m_cardListNumber] = i;
+			m_cardListNumber++;
+		}
+	}
+	return m_cardListNumber;
+}
 
-BOOL CHaveCard::Load(void)
+int CHaveCard::GetCardListCard(int n)
+{
+	return m_cardList[n];
+}
+
+int CHaveCard::GetCardListNumber(int n)
+{
+	int card = GetCardListCard(n);
+	return GetCard(card);
+}
+
+
+
+BOOL CHaveCard::Load(BOOL defaultFlag)
 {
 	CNameList* list = new CNameList();
-	LPCSTR filenameonly = "havecard.xtx";
 	char filename[256];
+
+	LPCSTR filenameonly = "havecard.xtx";
+
 	LPSTR folder = CMySaveFolder::GetFullFolder();
-	sprintf_s(filename,256,"%s\\%s",folder,filenameonly);
-	if (CMyFile::CheckExistFile(folder,filenameonly,FALSE))
+	if (defaultFlag)
 	{
-		if (list->LoadFile(filename))
+		folder = "nya";
+	}
+
+	sprintf_s(filename,256,"%s\\%s",folder,filenameonly);
+
+
+
+
+//	if (CMyFile::CheckExistFile(folder,filenameonly,FALSE))
+//	{
+		if (list->LoadFile(filename,FALSE,TRUE))
 		{
 			int dataNumber = list->GetNameKosuu();
 			ClearList();
@@ -72,20 +112,20 @@ BOOL CHaveCard::Load(void)
 				int param1 = atoi(list->GetName(0));
 				int param2 = atoi(list->GetName(1));
 
-				for (int i=0;i<dataNumber/2;i++)
+				for (int i=1;i<dataNumber/2;i++)
 				{
-					int card = atoi(list->GetName(i*2+2));
-					int n = atoi(list->GetName(i*2+1+2));
+					int card = atoi(list->GetName(i*2));
+					int n = atoi(list->GetName(i*2+1));
 					if ((card >= 0) && (card < m_listMax))
 					{
 						m_data[card] = n;
 					}
 				}
 			}
+			delete list;
+			return TRUE;
 		}
-		delete list;
-		return TRUE;
-	}
+//	}
 
 	delete list;
 	return FALSE;

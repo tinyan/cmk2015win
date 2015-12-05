@@ -9,12 +9,13 @@ public:
 	~CDeckData();
 	void End(void);
 
+	int GetListNumber(void){return m_listNumber;}
 	int GetUsedNumber(void);
 	void ClearList(void);
 	void SetCard(int n,int card);
 	int GetCard(int n);
 
-	BOOL Load(int n = -1);
+	BOOL Load(int n = -1,BOOL defaultFlag = FALSE);
 	BOOL Save(int n = -1);
 
 private:
@@ -22,6 +23,9 @@ private:
 	int m_listMax;
 	int m_listNumber;
 	int* m_data;
+
+
+
 
 };
 

@@ -76,19 +76,23 @@ int CDeckData::GetCard(int n)
 	return 0;
 }
 
-BOOL CDeckData::Load(int n)
+BOOL CDeckData::Load(int n,BOOL defaultFlag)
 {
 	if (n == -1) n = m_deckNumber;
 
 	CNameList* list = new CNameList();
 	char filenameonly[256];
-	sprintf_s(filenameonly,256,"deck%d",n);
+	sprintf_s(filenameonly,256,"deck%d.xtx",n);
 	char filename[1024];
 	LPSTR folder = CMySaveFolder::GetFullFolder();
-	sprintf_s(filename,1024,"%s\\%s",folder,filenameonly);
-	if (CMyFile::CheckExistFile(folder,filenameonly,FALSE))
+	if (defaultFlag)
 	{
-		if (list->LoadFile(filename))
+		folder = "nya";
+	}
+	sprintf_s(filename,1024,"%s\\%s",folder,filenameonly);
+//	if (CMyFile::CheckExistFile(folder,filenameonly,FALSE))
+//	{
+		if (list->LoadFile(filename,FALSE,TRUE))
 		{
 			int dataNumber = list->GetNameKosuu();
 			ClearList();
@@ -97,20 +101,20 @@ BOOL CDeckData::Load(int n)
 				int param1 = atoi(list->GetName(0));
 				int param2 = atoi(list->GetName(1));
 
-				for (int i=0;i<dataNumber/2;i++)
+				for (int i=1;i<dataNumber/2;i++)
 				{
-					int place = atoi(list->GetName(i*2+2));
-					int card = atoi(list->GetName(i*2+1+2));
+					int place = atoi(list->GetName(i*2));
+					int card = atoi(list->GetName(i*2+1));
 					if ((place >= 0) && (place < m_listMax))
 					{
 						m_data[place] = card;
 					}
 				}
 			}
+			delete list;
+			return TRUE;
 		}
-		delete list;
-		return TRUE;
-	}
+//	}
 
 	delete list;
 	return FALSE;
