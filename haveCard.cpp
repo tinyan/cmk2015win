@@ -12,7 +12,7 @@
 
 CHaveCard::CHaveCard()
 {
-	m_listMax = 256;
+	m_listMax = 1024;
 	m_data = new int[m_listMax];
 	m_cardList = new int[m_listMax];
 	ClearList();

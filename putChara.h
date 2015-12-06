@@ -10,9 +10,13 @@ public:
 	virtual ~CPutChara();
 	void End(void);
 
+	void Put(POINT pt,int n);
+	void Put(POINT pt,int nx,int ny);
 	void Put(int x,int y,int n);
 	void Put(int x,int y,int nx,int ny);
 
+	void TransPut(POINT pt,int n,int ps);
+	void TransPut(POINT pt,int nx,int ny,int ps);
 	void TransPut(int x,int y,int n,int ps);
 	void TransPut(int x,int y,int nx,int ny,int ps);
 

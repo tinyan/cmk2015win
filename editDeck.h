@@ -14,6 +14,7 @@ class CPutCard;
 class CHaveCard;
 class CDeckData;
 
+class CCommonButton;
 
 class CEditDeck : public CCommonGeneral
 {
@@ -43,7 +44,24 @@ private:
 
 	int m_listNumber;
 
-	int m_cardPerPage;
+	int m_baseCardPerPage;
+	int m_baseCardPerPageX;
+	int m_baseCardPerPageY;
+
+	int m_deckCardPrintNumberX;
+	int m_deckCardPrintNumberY;
+	int m_deckCardNumber;
+
+	POINT m_deckCardPrint;
+	SIZE m_deckCardNext;
+	SIZE m_deckCardSize;
+
+
+	POINT m_baseCardPrint;
+	SIZE m_baseCardNext;
+	SIZE m_baseCardSize;
+
+
 
 	int m_workMax;
 	int* m_card;
@@ -59,10 +77,27 @@ private:
 	int m_onAreaType;
 	int m_onAreaNumber;
 
-	RECT m_upperArea;
-	RECT m_lowerArea;
+	RECT m_deckArea;
+	RECT m_baseArea;
 
 	BOOL CheckInArea(POINT pt,RECT* lpRect);
+
+	int m_page;
+	int m_pageMax;
+
+	CCommonButton* m_saveButton;
+
+	void ChangePage(int updown);
+
+	POINT GetDeckPoint(int n);
+	POINT GetBasePoint(int place);
+
+	int GetOnDeck(POINT pt);
+	int GetOnBase(POINT pt);
+
+	void Modosu(void);
+
+	int m_largeCardPrintCount;
 };
 
 

@@ -9,7 +9,7 @@ public:
 	~CDeckData();
 	void End(void);
 
-	int GetListNumber(void){return m_listNumber;}
+	int GetListNumber(void){return m_listMax;}
 	int GetUsedNumber(void);
 	void ClearList(void);
 	void SetCard(int n,int card);
@@ -21,7 +21,7 @@ public:
 private:
 	int m_deckNumber;
 	int m_listMax;
-	int m_listNumber;
+//	int m_listNumber;
 	int* m_data;
 
 

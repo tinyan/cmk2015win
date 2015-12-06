@@ -14,6 +14,8 @@ public:
 	LPSTR GetName(int card);
 	int GetNeedMana(int card,int manaType);
 	int GetType(int card);
+	int GetMiniCardNumber(int card);
+	LPSTR GetFilename(int card);
 
 
 	static LPSTR m_errorName;

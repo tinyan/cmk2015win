@@ -14,7 +14,7 @@ CDeckData::CDeckData(int n)
 {
 	m_deckNumber = n;
 	m_listMax = 256;
-	m_listNumber = 40;
+//	m_listNumber = 45;
 	m_data = new int[m_listMax];
 	
 	ClearList();
@@ -36,7 +36,7 @@ int CDeckData::GetUsedNumber(void)
 	int n = 0;
 	for (int i=0;i<m_listMax;i++)
 	{
-		if (i<m_listNumber)
+//		if (i<m_Number)
 		{
 			if (m_data[i] > 0)
 			{
@@ -60,7 +60,7 @@ void CDeckData::SetCard(int n,int card)
 {
 	if ((n>=0) && (n<m_listMax))
 	{
-		if (n<m_listNumber)
+//		if (n<m_listNumber)
 		{
 			m_data[n] = card;
 		}

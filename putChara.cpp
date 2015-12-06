@@ -31,6 +31,11 @@ void CPutChara::End(void)
 	ENDDELETECLASS(m_pic);
 }
 
+void CPutChara::Put(POINT pt,int n)
+{
+	Put(pt.x,pt.y,n);
+}
+
 void CPutChara::Put(int x,int y,int n)
 {
 	int nx = n % m_blockX;
@@ -38,14 +43,19 @@ void CPutChara::Put(int x,int y,int n)
 	Put(x,y,nx,ny);
 }
 
+void CPutChara::Put(POINT pt,int nx,int ny)
+{
+	Put(pt.x,pt.y,nx,ny);
+}
+
 void CPutChara::Put(int x,int y,int nx,int ny)
 {
-	if ((nx>=0) && (ny>=0) && (nx < m_blockX) && (ny<m_blockY))
-	{
-		int srcX = m_sizeX * nx;
-		int srcY = m_sizeY * ny;
-		m_pic->Blt(x-m_sizeX/2,y-m_sizeY/2,srcX,srcY,m_sizeX,m_sizeY,TRUE);
-	}
+	TransPut(x,y,nx,ny,100);
+}
+
+void CPutChara::TransPut(POINT pt,int n,int ps)
+{
+	TransPut(pt.x,pt.y,n,ps);
 }
 
 void CPutChara::TransPut(int x,int y,int n,int ps)
@@ -55,13 +65,28 @@ void CPutChara::TransPut(int x,int y,int n,int ps)
 	TransPut(x,y,nx,ny,ps);
 }
 
+void CPutChara::TransPut(POINT pt,int nx,int ny,int ps)
+{
+	TransPut(pt.x,pt.y,nx,ny,ps);
+}
+
 void CPutChara::TransPut(int x,int y,int nx,int ny,int ps)
 {
 	if ((nx>=0) && (ny>=0) && (nx < m_blockX) && (ny<m_blockY))
 	{
 		int srcX = m_sizeX * nx;
 		int srcY = m_sizeY * ny;
-		m_pic->TransLucentBlt2(x-m_sizeX/2,y-m_sizeY/2,srcX,srcY,m_sizeX,m_sizeY,ps);
+		int putX = x - m_sizeX / 2;
+		int putY = y - m_sizeY / 2;
+
+		if (ps == 100)
+		{
+			m_pic->Blt(putX,putY,srcX,srcY,m_sizeX,m_sizeY,TRUE);
+		}
+		else
+		{
+			m_pic->TransLucentBlt2(putX,putY,srcX,srcY,m_sizeX,m_sizeY,ps);
+		}
 	}
 }
 

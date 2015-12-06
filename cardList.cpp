@@ -11,6 +11,8 @@ LPSTR CCardList::m_errorName = "ƒGƒ‰[";
 #define PARAM_MANA0 1
 #define PARAM_CARDNAME 7
 #define PARAM_CARDTYPE 8
+#define PARAM_MINICARDNUMBER 30
+#define PARAM_CARDFILENAME 31
 
 char CCardList::m_searchTable[][16][64]=
 {
@@ -81,7 +83,10 @@ CCardList::CCardList()
 	//number
 	//mana0,mana1,mana2,mana3,mana4,mana5
 	//cardname
-	//pad[24]
+	//cardType
+	//pad[21]
+	//minicardnumber
+	//filename
 
 }
 
@@ -118,6 +123,12 @@ LPSTR CCardList::GetName(int card)
 	return m_list->GetName(n * m_paramNumber + PARAM_CARDNAME);
 }
 
+LPSTR CCardList::GetFilename(int card)
+{
+	int n = CardToNumber(card);
+	return m_list->GetName(n * m_paramNumber + PARAM_CARDFILENAME);
+}
+
 int CCardList::GetNeedMana(int card,int manaType)
 {
 	int n = CardToNumber(card);
@@ -130,6 +141,12 @@ int CCardList::GetType(int card)
 	return m_data[n*m_paramNumber + PARAM_CARDTYPE];
 }
 
+int CCardList::GetMiniCardNumber(int card)
+{
+	if (card == 0) return 0;
+	int n = CardToNumber(card);
+	return m_data[n*m_paramNumber + PARAM_MINICARDNUMBER];
+}
 
 BOOL CCardList::CheckCardNumber(int card)
 {
