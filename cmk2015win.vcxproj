@@ -91,8 +91,10 @@
     <ClCompile Include="gameTitle.cpp" />
     <ClCompile Include="haveCard.cpp" />
     <ClCompile Include="hexarea.cpp" />
+    <ClCompile Include="landTimer.cpp" />
     <ClCompile Include="loadDeck.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mana.cpp" />
     <ClCompile Include="play.cpp" />
     <ClCompile Include="putCard.cpp" />
     <ClCompile Include="putChara.cpp" />
@@ -110,8 +112,10 @@
     <ClInclude Include="gameTitle.h" />
     <ClInclude Include="haveCard.h" />
     <ClInclude Include="hexarea.h" />
+    <ClInclude Include="landTimer.h" />
     <ClInclude Include="loadDeck.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="mana.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="play.h" />
     <ClInclude Include="putCard.h" />

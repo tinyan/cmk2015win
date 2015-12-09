@@ -11,6 +11,8 @@ LPSTR CCardList::m_errorName = "ƒGƒ‰[";
 #define PARAM_MANA0 1
 #define PARAM_CARDNAME 7
 #define PARAM_CARDTYPE 8
+
+#define PARAM_CARDTEXT 24
 #define PARAM_MINICARDNUMBER 30
 #define PARAM_CARDFILENAME 31
 
@@ -127,6 +129,12 @@ LPSTR CCardList::GetFilename(int card)
 {
 	int n = CardToNumber(card);
 	return m_list->GetName(n * m_paramNumber + PARAM_CARDFILENAME);
+}
+
+LPSTR CCardList::GetText(int card,int k)
+{
+	int n = CardToNumber(card);
+	return m_list->GetName(n * m_paramNumber + PARAM_CARDTEXT + k);
 }
 
 int CCardList::GetNeedMana(int card,int manaType)

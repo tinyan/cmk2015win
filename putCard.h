@@ -4,11 +4,12 @@
 class CPutChara;
 class CCardList;
 class CSuuji;
+class CMyMessage;
 
 class CPutCard
 {
 public:
-	CPutCard(CCardList* cardList);
+	CPutCard(CMyMessage* message,CCardList* cardList);
 	~CPutCard();
 	void End(void);
 
@@ -20,6 +21,8 @@ protected:
 
 	int m_cardPicNumber;
 	CPicture* m_cardPic;
+
+	CMyMessage* m_message;
 
 private:
 	int m_seatMax;

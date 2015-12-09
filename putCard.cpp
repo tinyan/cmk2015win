@@ -9,6 +9,7 @@
 
 #include "..\..\systemNNN\nnnUtilLib\suuji.h"
 #include "..\..\systemNNN\nnnUtilLib\systempicture.h"
+#include "..\..\systemNNN\nnnUtilLib\mymessage.h"
 
 #include "cardList.h"
 #include "putChara.h"
@@ -16,9 +17,11 @@
 #include "putCard.h"
 
 
-CPutCard::CPutCard(CCardList* cardList)
+CPutCard::CPutCard(CMyMessage* message,CCardList* cardList)
 {
 	m_cardList = cardList;
+	m_message = message;
+
 	m_seatMax = 16;
 	for (int i=0;i<m_seatMax;i++)
 	{
@@ -82,6 +85,56 @@ void CPutCard::PutCard(int x,int y,int card,int ps)
 		m_cardPic->TransLucentBlt2(putX,putY,0,0,sizeX,sizeY,ps);
 	}
 
+
+	//name
+	if (1)
+	{
+		LPSTR mes = m_cardList->GetName(card);
+		m_message->PrintMessage(putX+4,putY+4,mes,20,255,255,255,0,-1,0);
+	}
+
+	//mana
+	if (1)
+	{
+		int rgb[3][3] = 
+		{
+			{255,255,255},
+			{0,255,0},
+			{255,0,0},
+		};
+
+		int total = 0;
+
+		for (int n=2;n>=0;n--)
+		{
+			int need = m_cardList->GetNeedMana(card,n);
+
+			int r = rgb[n][0];
+			int g = rgb[n][1];
+			int b = rgb[n][2];
+
+			for (int i=0;i<need;i++)
+			{
+				int x = putX + sizeX - (total+1) * 12;
+				int y = putY +8;
+				CAllGeo::BoxFill(x,y,10,10,r,g,b);
+
+				total++;
+			}
+		}
+	}
+
+	//rare
+
+
+	for (int i=0;i<4;i++)
+	{
+		LPSTR mes = m_cardList->GetText(card,i);
+		if ((*mes) != 0)
+		{
+			m_message->PrintMessage(putX,putY+sizeY-(4-i) * 24,mes);
+		}
+	}
 }
 
 void CPutCard::PutMiniCard(POINT pt,int card,int ps,int number)

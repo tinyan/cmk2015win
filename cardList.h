@@ -16,6 +16,7 @@ public:
 	int GetType(int card);
 	int GetMiniCardNumber(int card);
 	LPSTR GetFilename(int card);
+	LPSTR GetText(int card,int n);
 
 
 	static LPSTR m_errorName;
