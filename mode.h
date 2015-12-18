@@ -10,6 +10,10 @@
 #define PLAY_MODE 52
 #define EDITDECK_MODE 53
 
+#define GACHA_MODE 55
+
+
+
 
 #define SELECTDECK_MODE 60
 #define LOADDECK_MODE 61

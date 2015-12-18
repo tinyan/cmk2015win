@@ -52,6 +52,35 @@ int CMana::GetMana(int n)
 	return m_mana[n];
 }
 
+void CMana::AddLandPower(int n,int pw)
+{
+	int d = m_manaMax[n];
+	d += pw;
+	SetManaMax(n,d);
+}
+
+void CMana::AddMana(int n,int mana)
+{
+	int d = GetMana(n);
+	d += mana;
+	SetMana(n,d);
+}
+
+void CMana::AllHeal(int d)
+{
+	for (int i=0;i<16;i++)
+	{
+		if (d == -1)
+		{
+			m_mana[i] = m_manaMax[i];
+		}
+		else
+		{
+			AddMana(i,d);
+		}
+	}
+}
+
 BOOL CMana::UseMana(int n,int mana)
 {
 	if (mana > m_mana[n]) return FALSE;

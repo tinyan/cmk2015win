@@ -38,7 +38,36 @@ CPutCard::CPutCard(CMyMessage* message,CCardList* cardList)
 	CPicture* suujiPic = CSystemPicture::GetSystemPicture("ta_minicard_number");
 	m_minicardSuuji = new CSuuji(suujiPic,16,16,3);
 
+	m_cardBase[0] = new CPicture("sys\\ta_whiteCard");
+	m_cardBase[1] = new CPicture("sys\\ta_greenCard");
+	m_cardBase[2] = new CPicture("sys\\ta_redCard");
+	m_cardBase[3] = new CPicture("sys\\ta_goldCard");
 
+	m_rare = new CPutChara("sys\\ta_rare",8,1);
+	m_rarePrintX = 226;
+	m_rarePrintY = 244;
+
+	m_namePrintX = 20;
+	m_namePrintY = 14;
+
+	m_textPrintX = 28;
+	m_textPrintY = 260;
+	m_textNextY = 17;
+
+	m_type = new CPutChara("sys\\ta_type",1,8);
+	m_typePrintX = 84;
+	m_typePrintY = 244;
+
+	m_cardMana = new CPutChara("sys\\ta_cardMana",10,10);
+	m_cardManaPrintX = 228;
+	m_cardmanaPrintY = 26;
+	m_cardManaNextX = -16;
+
+	m_etcPrintX = 220;
+	m_etcPrintY = 354;
+	m_etcNextX = 16;
+
+	m_etcSuuji = new CSuuji(CSystemPicture::GetSystemPicture("ta_etcsuuji"),16,16,3);
 }
 
 CPutCard::~CPutCard()
@@ -48,6 +77,15 @@ CPutCard::~CPutCard()
 
 void CPutCard::End(void)
 {
+	ENDDELETECLASS(m_etcSuuji);
+	ENDDELETECLASS(m_cardMana);
+	ENDDELETECLASS(m_type);
+	ENDDELETECLASS(m_rare);
+
+	for (int i=0;i<4;i++)
+	{
+		ENDDELETECLASS(m_cardBase[i]);
+	}
 	ENDDELETECLASS(m_minicardSuuji);
 	ENDDELETECLASS(m_cardPic);
 	ENDDELETECLASS(m_miniCard);
@@ -76,63 +114,109 @@ void CPutCard::PutCard(int x,int y,int card,int ps)
 	int putX = x - sizeX / 2;
 	int putY = y - sizeY / 2;
 
-	if (ps >= 100)
+
+	int baseType = 0;
+	int needMana[16];
+	for (int i=0;i<16;i++)
 	{
-		m_cardPic->Blt(putX,putY,0,0,sizeX,sizeY,TRUE);
+		needMana[i] = m_cardList->GetNeedMana(card,i);
+	}
+	int whiteMana = needMana[0];
+	int greenMana = needMana[1];
+	int redMana = needMana[2];
+
+	if ((greenMana > 0) && (redMana > 0))
+	{
+		baseType = 3;
 	}
 	else
 	{
-		m_cardPic->TransLucentBlt2(putX,putY,0,0,sizeX,sizeY,ps);
+		if (greenMana > 0) baseType = 1;
+		if (redMana > 0) baseType = 2;
 	}
 
 
-	//name
-	if (1)
-	{
-		LPSTR mes = m_cardList->GetName(card);
-		m_message->PrintMessage(putX+4,putY+4,mes,20,255,255,255,0,-1,0);
-	}
+	int rare = m_cardList->GetRare(card);
+	int type = m_cardList->GetType(card);
+
+	m_cardBase[baseType]->TransLucentBlt2(putX,putY,0,0,sizeX,sizeY,ps);
+	m_rare->TransPut(putX+m_rarePrintX,putY+m_rarePrintY,rare,ps);
+
+	m_type->TransPut(putX+m_typePrintX,putY+m_typePrintY,type,ps);
+
 
 	//mana
 	if (1)
 	{
-		int rgb[3][3] = 
-		{
-			{255,255,255},
-			{0,255,0},
-			{255,0,0},
-		};
-
-		int total = 0;
+		int dx = 0;
 
 		for (int n=2;n>=0;n--)
 		{
 			int need = m_cardList->GetNeedMana(card,n);
-
-			int r = rgb[n][0];
-			int g = rgb[n][1];
-			int b = rgb[n][2];
-
-			for (int i=0;i<need;i++)
+			int srcY = n;
+			int srcX = 0;
+			int loop = need;
+			if (n == 0)
 			{
-				int x = putX + sizeX - (total+1) * 12;
-				int y = putY +8;
-				CAllGeo::BoxFill(x,y,10,10,r,g,b);
+				loop = 1;
+				srcX = need - 1;
+				if (need == 0) loop = 0;
+			}
 
-				total++;
+			for (int i=0;i<loop;i++)
+			{
+				int x = putX + m_cardManaPrintX + dx;
+				int y = putY + m_cardmanaPrintY;
+
+				m_cardMana->TransPut(x,y,srcX,srcY,ps);
+
+				dx += m_cardManaNextX;
 			}
 		}
 	}
 
-	//rare
 
 
-	for (int i=0;i<4;i++)
+	//name
+	if (ps>50)
 	{
-		LPSTR mes = m_cardList->GetText(card,i);
-		if ((*mes) != 0)
+		LPSTR mes = m_cardList->GetName(card);
+		m_message->PrintMessage(putX+m_namePrintX,putY+m_namePrintY,mes,20,255,255,255,0,-1,0);
+
+
+		for (int i=0;i<4;i++)
 		{
-			m_message->PrintMessage(putX,putY+sizeY-(4-i) * 24,mes);
+			LPSTR mes = m_cardList->GetText(card,i);
+			if ((*mes) != '@')
+			{
+				m_message->PrintMessage(putX+m_textPrintX,putY+m_textPrintY + m_textNextY * i,mes,16,0,0,0);
+			}
+		}
+
+		//Ží—Þ
+
+	}
+
+
+	//etc
+	if (ps > 50)
+	{
+		LPSTR etcMes = m_cardList->GetEtcMes(card);
+		if (etcMes != NULL)
+		{
+			int ln = strlen(etcMes);
+			for (int i=0;i<ln;i++)
+			{
+				char c = etcMes[i];
+				int d = (int)c;
+				d -= '0';
+				if (c == '/') d = 11;
+				int x = putX + m_etcPrintX - (ln-1-i) * m_etcNextX;
+				int y = putY + m_etcPrintY;
+				m_etcSuuji->Put(x,y,d);
+
+			}
+
 		}
 	}
 }

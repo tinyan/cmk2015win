@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 
 #include "..\..\systemNNN\nyanlib\include\commonMacro.h"
 #include "..\..\systemNNN\nnnUtilLib\nameList.h"
@@ -11,6 +12,29 @@ LPSTR CCardList::m_errorName = "ÉGÉâÅ[";
 #define PARAM_MANA0 1
 #define PARAM_CARDNAME 7
 #define PARAM_CARDTYPE 8
+
+//ã§í 
+//people
+#define PARAM_HP 10
+#define PARAM_ATTACK 11
+#define PARAM_DEFFENSE 12
+#define PARAM_RANGE 13
+#define PARAM_ATTACKSPEED 14
+#define PARAM_OCCUPY 15
+#define PARAM_WEAPONSPEED 16
+#define PARAM_MOVESPEED 17
+#define PARAM_NUMBERS 20
+
+//land
+#define PARAM_LANDPOWER0 9
+//equip
+#define PARAM_EQUIPTYPE 9
+
+
+
+#define PARAM_RARE 21
+#define PARAM_EQUIPPIC 22
+#define PARAM_ITEMPIC 23
 
 #define PARAM_CARDTEXT 24
 #define PARAM_MINICARDNUMBER 30
@@ -81,6 +105,7 @@ CCardList::CCardList()
 		}
 	}
 
+	m_etcMes[0] = 0;
 
 	//number
 	//mana0,mana1,mana2,mana3,mana4,mana5
@@ -143,6 +168,12 @@ int CCardList::GetNeedMana(int card,int manaType)
 	return m_data[n*m_paramNumber + PARAM_MANA0 + manaType];
 }
 
+int CCardList::GetLandPower(int card,int manaType)
+{
+	int n = CardToNumber(card);
+	return m_data[n*m_paramNumber + PARAM_LANDPOWER0 + manaType];
+}
+
 int CCardList::GetType(int card)
 {
 	int n = CardToNumber(card);
@@ -154,6 +185,104 @@ int CCardList::GetMiniCardNumber(int card)
 	if (card == 0) return 0;
 	int n = CardToNumber(card);
 	return m_data[n*m_paramNumber + PARAM_MINICARDNUMBER];
+}
+
+int CCardList::GetEquipType(int card)
+{
+	if (card == 0) return 0;
+	int n = CardToNumber(card);
+	return m_data[n*m_paramNumber + PARAM_EQUIPTYPE];
+}
+
+int CCardList::GetEquipPic(int card)
+{
+	if (card == 0) return 0;
+	int n = CardToNumber(card);
+	return m_data[n*m_paramNumber + PARAM_EQUIPPIC];
+}
+
+int CCardList::GetItemPic(int card)
+{
+	if (card == 0) return 0;
+	int n = CardToNumber(card);
+	return m_data[n*m_paramNumber + PARAM_ITEMPIC];
+}
+
+int CCardList::GetHP(int card)
+{
+	return GetParamData(card,PARAM_HP);
+}
+
+int CCardList::GetAttack(int card)
+{
+	return GetParamData(card,PARAM_ATTACK);
+}
+
+int CCardList::GetDeffense(int card)
+{
+	return GetParamData(card,PARAM_DEFFENSE);
+}
+
+int CCardList::GetRange(int card)
+{
+	return GetParamData(card,PARAM_RANGE);
+}
+
+int CCardList::GetAttackSpeed(int card)
+{
+	return GetParamData(card,PARAM_ATTACKSPEED);
+}
+
+int CCardList::GetOccupy(int card)
+{
+	return GetParamData(card,PARAM_OCCUPY);
+}
+
+int CCardList::GetWeaponSpeed(int card)
+{
+	return GetParamData(card,PARAM_WEAPONSPEED);
+}
+
+int CCardList::GetMoveSpeed(int card)
+{
+	return GetParamData(card,PARAM_MOVESPEED);
+}
+
+int CCardList::GetRare(int card)
+{
+	return GetParamData(card,PARAM_RARE);
+}
+
+int CCardList::GetNumbers(int card)
+{
+	return GetParamData(card,PARAM_NUMBERS);
+}
+
+LPSTR CCardList::GetEtcMes(int card)
+{
+	int type = GetType(card);
+	if (type == 2)
+	{
+		int attack = GetAttack(card);
+		int deffense = GetDeffense(card);
+		int hp = GetHP(card);
+		sprintf_s(m_etcMes,256,"%d/%d/%d",attack,deffense,hp);
+		return m_etcMes;
+	}
+	else
+	{
+		
+	}
+
+	return NULL;
+}
+
+
+int CCardList::GetParamData(int card,int param)
+{
+	if (card == 0) return 0;
+	int n = CardToNumber(card);
+	return m_data[n*m_paramNumber + param];
 }
 
 BOOL CCardList::CheckCardNumber(int card)

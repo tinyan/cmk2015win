@@ -82,8 +82,12 @@ public:
 	CHaveCard* GetHaveCard(void){return m_haveCard;}
 	CCardList* GetCardList(void){return m_cardList;}
 	CDeckData* GetDeckData(void){return m_deckData;}
+	CDeckData* GetEnemyDeckData(void){return m_enemyDeckData;}
 	CPutCard* GetPutCard(void){return m_putCard;}
 
+	void InitData(void);
+	void SetGachaCard(int card){m_gachaCard = card;}
+	int GetGachaCard(void){return m_gachaCard;}
 private:
 	void CreateAllClass(void);
 //	void AfterInitNewGame(int uraMode = 0, BOOL demoFlag = FALSE);
@@ -96,10 +100,12 @@ private:
 
 	CHaveCard* m_haveCard;
 	CDeckData* m_deckData;
+	CDeckData* m_enemyDeckData;
 	CPutCard* m_putCard;
 
 //	int m_selectedStage;
 	int m_deckNumber;
+	int m_gachaCard;
 
 	int m_saveData[256];
 };

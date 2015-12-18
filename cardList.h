@@ -17,7 +17,23 @@ public:
 	int GetMiniCardNumber(int card);
 	LPSTR GetFilename(int card);
 	LPSTR GetText(int card,int n);
+	int GetLandPower(int card,int manaType);
 
+	int GetEquipType(int card);
+	int GetEquipPic(int card);
+	int GetItemPic(int card);
+
+	int GetHP(int card);
+	int GetAttack(int card);
+	int GetDeffense(int card);
+	int GetRange(int card);
+	int GetAttackSpeed(int card);
+	int GetOccupy(int card);
+	int GetWeaponSpeed(int card);
+	int GetMoveSpeed(int card);
+	int GetNumbers(int card);
+	int GetRare(int card);
+	LPSTR GetEtcMes(int card);
 
 	static LPSTR m_errorName;
 private:
@@ -35,6 +51,9 @@ private:
 
 	int SearchName(int type,LPSTR name);
 	int CardToNumber(int card);
+
+	int GetParamData(int card,int param);
+	char m_etcMes[256];
 };
 
 #endif

@@ -83,43 +83,57 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="attackObject.cpp" />
+    <ClCompile Include="attackObjectControl.cpp" />
     <ClCompile Include="battleStatus.cpp" />
     <ClCompile Include="cardList.cpp" />
+    <ClCompile Include="damageSuuji.cpp" />
     <ClCompile Include="deckData.cpp" />
     <ClCompile Include="editDeck.cpp" />
+    <ClCompile Include="gacha.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameTitle.cpp" />
     <ClCompile Include="haveCard.cpp" />
     <ClCompile Include="hexarea.cpp" />
+    <ClCompile Include="itemStatus.cpp" />
     <ClCompile Include="landTimer.cpp" />
     <ClCompile Include="loadDeck.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mana.cpp" />
     <ClCompile Include="play.cpp" />
+    <ClCompile Include="printDamageEffect.cpp" />
     <ClCompile Include="putCard.cpp" />
     <ClCompile Include="putChara.cpp" />
+    <ClCompile Include="putEquip.cpp" />
     <ClCompile Include="putPeople.cpp" />
     <ClCompile Include="saveDeck.cpp" />
     <ClCompile Include="selectDeck.cpp" />
     <ClCompile Include="unit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="attackObject.h" />
+    <ClInclude Include="attackObjectControl.h" />
     <ClInclude Include="battleStatus.h" />
     <ClInclude Include="cardList.h" />
+    <ClInclude Include="damageSuuji.h" />
     <ClInclude Include="deckData.h" />
     <ClInclude Include="editDeck.h" />
+    <ClInclude Include="gacha.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameTitle.h" />
     <ClInclude Include="haveCard.h" />
     <ClInclude Include="hexarea.h" />
+    <ClInclude Include="itemStatus.h" />
     <ClInclude Include="landTimer.h" />
     <ClInclude Include="loadDeck.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mana.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="play.h" />
+    <ClInclude Include="printDamageEffect.h" />
     <ClInclude Include="putCard.h" />
     <ClInclude Include="putChara.h" />
+    <ClInclude Include="putEquip.h" />
     <ClInclude Include="putPeople.h" />
     <ClInclude Include="saveDeck.h" />
     <ClInclude Include="selectDeck.h" />

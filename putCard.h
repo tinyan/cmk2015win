@@ -29,6 +29,28 @@ private:
 	CPutChara* m_card[16];
 	CPutChara* m_miniCard;
 	CSuuji* m_minicardSuuji;
+	CSuuji* m_etcSuuji;
+
+	CPutChara* m_rare;
+	CPutChara* m_type;
+	CPutChara* m_cardMana;
+
+	CPicture* m_cardBase[4];
+	int m_rarePrintX;
+	int m_rarePrintY;
+	int m_namePrintX;
+	int m_namePrintY;
+	int m_textPrintX;
+	int m_textPrintY;
+	int m_textNextY;
+	int m_typePrintX;
+	int m_typePrintY;
+	int m_cardManaPrintX;
+	int m_cardmanaPrintY;
+	int m_cardManaNextX;
+	int m_etcPrintX;
+	int m_etcPrintY;
+	int m_etcNextX;
 
 };
 

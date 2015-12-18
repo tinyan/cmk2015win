@@ -13,7 +13,7 @@ public:
 
 	void SetTimerMax(int mx);
 	void SetTimer(int tm);
-	void AddTimer(int add = 1);
+	BOOL AddTimer(int add = 1);
 	void SetPoint(POINT pt);
 
 	void Print(int tm = -1);

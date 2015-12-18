@@ -1,12 +1,12 @@
-#if !defined __CMK2015WIN_BATTLESTATUS__
-#define __CMK2015WIN_BATTLESTATUS__
+#if !defined __CMK2015WIN_ITEMSTATUS__
+#define __CMK2015WIN_ITEMSTATUS__
 
-class CCardList;
-class CBattleStatus
+
+class CItemStatus
 {
 public:
-	CBattleStatus();
-	~CBattleStatus();
+	CItemStatus();
+	~CItemStatus();
 	void End(void);
 
 	int m_serial;
@@ -40,11 +40,12 @@ public:
 	float m_speed;
 	float m_range;
 
-
+	int m_itemType;
+	int m_card;
 
 	void Clear(void);
 	void NewSerial(void);
-	void CalcuStatus(CCardList* list);
+	void CalcuStatus(void);
 
 	static int m_serialCount;
 

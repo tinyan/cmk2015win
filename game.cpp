@@ -58,6 +58,8 @@
 #include "loadDeck.h"
 #include "saveDeck.h"
 
+#include "gacha.h"
+
 //#include "nekopic.h"
 
 #include "game.h"
@@ -106,8 +108,11 @@ void CGame::Create(void)
 		}
 	}
 
+	m_enemyDeckData = new CDeckData(100);
+	m_enemyDeckData->Load(100,TRUE);
 
 
+	m_gachaCard = 1;
 /*
 	char filename[1024];
 	wsprintf(filename,"%s\\stageclear.sav",saveFolder);
@@ -146,6 +151,7 @@ CGame::~CGame()
 
 void CGame::End(void)
 {
+	ENDDELETECLASS(m_enemyDeckData);
 	ENDDELETECLASS(m_deckData);
 	ENDDELETECLASS(m_haveCard);
 	ENDDELETECLASS(m_putCard);
@@ -205,6 +211,7 @@ void CGame::CreateAllClass(void)
 	m_general[EDITDECK_MODE] = new CEditDeck(this);
 	m_general[LOADDECK_MODE] = new CLoadDeck(this);
 	m_general[SAVEDECK_MODE] = new CSaveDeck(this);
+	m_general[GACHA_MODE] = new CGacha(this);
 
 
 //	m_general[NEKOPIC_MODE] = new CNekoPic(this);
@@ -353,7 +360,19 @@ void CGame::SetExtDataByLoad(LPVOID ptr,int extNumber)
 {
 }
 
+void CGame::InitData(void)
+{
+	if (m_haveCard->Load(TRUE))
+	{
+		m_haveCard->Save();
+	}
 
+	if (m_deckData->Load(0,TRUE))
+	{
+		m_deckData->Save(0);
+	}
+
+}
 
 /*_*/
 

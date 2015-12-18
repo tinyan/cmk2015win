@@ -14,8 +14,12 @@ public:
 	void Clear(void);
 	int GetMana(int n);
 	BOOL UseMana(int n,int mana);
+	void AddLandPower(int n,int pw);
+	void AddMana(int n,int mana);
+
 	void AddManaPower(int pw);
 	void AddAllMana(int add = 1);
+	void AllHeal(int d = -1);
 
 	void SetPoint(POINT pt);
 	void Print(void);

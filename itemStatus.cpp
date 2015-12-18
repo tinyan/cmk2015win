@@ -1,26 +1,25 @@
 #include <windows.h>
 
-#include "cardList.h"
-#include "battleStatus.h"
+#include "itemStatus.h"
 
-int CBattleStatus::m_serialCount = 0;
+int CItemStatus::m_serialCount = 0;
 
-CBattleStatus::CBattleStatus()
+CItemStatus::CItemStatus()
 {
 	m_playerEnemy = -1;
 	Clear();
 }
 
-CBattleStatus::~CBattleStatus()
+CItemStatus::~CItemStatus()
 {
 	End();
 }
 
-void CBattleStatus::End(void)
+void CItemStatus::End(void)
 {
 }
 
-void CBattleStatus::Clear(void)
+void CItemStatus::Clear(void)
 {
 	m_playerEnemy = -1;
 	m_targetNumber = -1;
@@ -37,13 +36,13 @@ void CBattleStatus::Clear(void)
 	m_weaponSpeed = 5;
 }
 
-void CBattleStatus::NewSerial(void)
+void CItemStatus::NewSerial(void)
 {
 	m_serial = m_serialCount;
 	m_serialCount++;
 }
 
-void CBattleStatus::CalcuStatus(CCardList* list)
+void CItemStatus::CalcuStatus(void)
 {
 	m_attack = m_attackBase;
 	m_deffense = m_deffenseBase;
@@ -52,16 +51,10 @@ void CBattleStatus::CalcuStatus(CCardList* list)
 	if (m_haveItem[0] > 0)
 	{
 		//weapon
-		int card = m_haveItem[0];
-		int attack = list->GetAttack(card);
-		m_attack += attack;
 	}
 	if (m_haveItem[1] > 0)
 	{
 		//shield
-		int card = m_haveItem[1];
-		int deffense = list->GetDeffense(card);
-		m_deffense += deffense;
 	}
 }
 

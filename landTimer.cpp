@@ -42,10 +42,15 @@ void CLandTimer::SetTimerMax(int mx)
 	m_timerMax = mx;
 }
 
-void CLandTimer::AddTimer(int add)
+BOOL CLandTimer::AddTimer(int add)
 {
 	m_timer += add;
-	if (m_timer > m_timerMax) m_timer = m_timerMax;
+	if (m_timer >= m_timerMax)
+	{
+		m_timer = m_timerMax;
+		return TRUE;
+	}
+	return FALSE;
 }
 
 void CLandTimer::SetTimer(int tm)
@@ -67,6 +72,8 @@ void CLandTimer::Print(POINT pt,int tm)
 {
 	if (tm == -1) tm = m_timer;
 
+	int putX = pt.x;
+	int putY = pt.y - m_size.cy / 2;
 
 	if (tm >= m_timerMax)
 	{
@@ -81,7 +88,7 @@ void CLandTimer::Print(POINT pt,int tm)
 		int g = add*4;
 		int b = add*4;
 
-		m_onPic->ColorAddBlt(pt.x,pt.y,0,0,m_size.cx,m_size.cy,TRUE,r,g,b);
+		m_onPic->ColorAddBlt(putX,putY,0,0,m_size.cx,m_size.cy,TRUE,r,g,b);
 
 		return;
 	}
@@ -89,11 +96,9 @@ void CLandTimer::Print(POINT pt,int tm)
 
 	int onGaze = (m_size.cx * tm) / m_timerMax;
 	int offGaze = m_size.cx - onGaze;
-
-	int putX = pt.x;
-	int putY = pt.y;
 	int sizeX = onGaze;
 	int sizeY = m_size.cy;
+
 	int srcX = 0;
 	int srcY = 0;
 
