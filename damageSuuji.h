@@ -24,6 +24,7 @@ public:
 		int count;
 		int countMax;
 		int color;
+		int countSpeed;
 	}SUUJIWORK;
 
 private:

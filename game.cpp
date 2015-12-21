@@ -49,6 +49,7 @@
 #include "haveCard.h"
 #include "deckData.h"
 #include "putCard.h"
+#include "stageData.h"
 
 //#include "gameTitle.h"
 #include "play.h"
@@ -57,6 +58,8 @@
 #include "editDeck.h"
 #include "loadDeck.h"
 #include "saveDeck.h"
+#include "selectStage.h"
+#include "clearData.h"
 
 #include "gacha.h"
 
@@ -88,6 +91,9 @@ void CGame::Create(void)
 	m_hexArea = new CHexArea();
 	m_putPeople = new CPutPeople();
 	m_putCard = new CPutCard(m_message,m_cardList);
+	m_stageData = new CStageData();
+	m_clearData = new CClearData();
+	m_clearData->Load();
 
 	m_haveCard = new CHaveCard();
 	if (!(m_haveCard->Load()))
@@ -107,6 +113,9 @@ void CGame::Create(void)
 			m_deckData->Save(0);
 		}
 	}
+
+	m_stage = 0;
+	m_subStage = 0;
 
 	m_enemyDeckData = new CDeckData(100);
 	m_enemyDeckData->Load(100,TRUE);
@@ -154,6 +163,8 @@ void CGame::End(void)
 	ENDDELETECLASS(m_enemyDeckData);
 	ENDDELETECLASS(m_deckData);
 	ENDDELETECLASS(m_haveCard);
+	ENDDELETECLASS(m_clearData);
+	ENDDELETECLASS(m_stageData);
 	ENDDELETECLASS(m_putCard);
 	ENDDELETECLASS(m_putPeople);
 	ENDDELETECLASS(m_hexArea);
@@ -212,6 +223,8 @@ void CGame::CreateAllClass(void)
 	m_general[LOADDECK_MODE] = new CLoadDeck(this);
 	m_general[SAVEDECK_MODE] = new CSaveDeck(this);
 	m_general[GACHA_MODE] = new CGacha(this);
+	m_general[SELECTSTAGE_MODE] = new CSelectStage(this);
+
 
 
 //	m_general[NEKOPIC_MODE] = new CNekoPic(this);
@@ -372,6 +385,13 @@ void CGame::InitData(void)
 		m_deckData->Save(0);
 	}
 
+}
+
+void CGame::SetStage(int stage,int subStage)
+{
+
+	m_stage = stage;
+	m_subStage = subStage;
 }
 
 /*_*/

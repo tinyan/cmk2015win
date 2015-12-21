@@ -1,77 +1,70 @@
 #include <windows.h>
 #include <stdio.h>
 
-#include "..\..\systemNNN\nyanLib\include\commonMacro.h"
+#include "..\..\systemNNN\nyanlib\include\commonMacro.h"
 #include "..\..\systemNNN\nnnUtilLib\nameList.h"
+
 
 
 #include "stageData.h"
 
-CStageData::CStageData(int n)
+#define PARAM_ENEMYDECK 2
+#define PARAM_WORLD 3
+#define PARAM_ENCHANT 4
+
+CStageData::CStageData()
 {
-	m_stage = n;
+	m_stageNumberMax = 16;
+	m_stageSubNumberMax = 4;
 
-	char filename[256];
-	sprintf_s(filename,"stage\\stage%d.xtx",m_stage);
 	m_list = new CNameList();
-	m_list->LoadFile(filename);
+	m_paramNumber = 32;
+	m_list->LoadFile("nya\\stagelist.xtx");
 
-	int p = 0;
-	m_startArea = GetRectData(p);
-	p += 6;
+	m_numberToWork = new int*[m_stageNumberMax];
 
-	m_targetNumber = GetNumber(p);
-	p++;
-	m_targetRect = new RECT[m_targetNumber+1];
-	m_targetType = new int[m_targetNumber+1];
-	for (int i=0;i<m_targetNumber;i++)
+	for (int i=0;i<m_stageNumberMax;i++)
 	{
-		m_targetRect[i] = GetRectData(p);
-		p += 4;
-		m_targetType[i] = GetNumber(p);
-		p += 2;
+		m_numberToWork[i] = new int[m_stageSubNumberMax];
+		for (int k=0;k<m_stageSubNumberMax;k++)
+		{
+			m_numberToWork[i][k] = -1;
+		}
+	}
+
+	m_dataMax = m_list->GetNameKosuu() / m_paramNumber;
+	m_data = new int[m_dataMax * m_paramNumber];
+
+	for (int i=1;i<m_dataMax;i++)
+	{
+		int stage = atoi(m_list->GetName(i*m_paramNumber+0));
+		int stageSubNumber = atoi(m_list->GetName(i*m_paramNumber+0));
+		if ((stage >= 0) && (stage < m_stageNumberMax) && (stageSubNumber >= 0) && (stageSubNumber < m_stageSubNumberMax))
+		{
+			m_numberToWork[stage][stageSubNumber] = i;
+
+		}
+
+		for (int k=0;k<m_paramNumber;k++)
+		{
+			int d = 0;
+			int dataType = 0;
+			if (dataType == 0)
+			{
+				d = atoi(m_list->GetName(i*m_paramNumber+k));
+			}
+//			else
+//			{
+//				d = SearchName(dataType,m_list->GetName(i*m_paramNumber+k));
+//			}
+
+			m_data[i*m_paramNumber+k] = d;
+
+		}
 	}
 
 
-	m_blockNumber = GetNumber(p);
-	p++;
-	m_blockRect = new RECT[m_blockNumber+1];
-	for (int i=0;i<m_blockNumber;i++)
-	{
-		m_blockRect[i] = GetRectData(p);
-		p += 6;
-	}
-
-	m_mirrorNumber = GetNumber(p);
-	p++;
-	m_mirrorRect = new RECT[m_mirrorNumber+1];
-	m_mirrorType = new int[m_mirrorNumber+1];
-	for (int i=0;i<m_mirrorNumber;i++)
-	{
-		m_mirrorRect[i] = GetRectData(p);
-		p += 4;
-		m_mirrorType[i] = GetNumber(p);
-		p += 2;
-	}
-
-	m_hintNumber = GetNumber(p);
-	p++;
-	m_hintRect = new RECT[m_hintNumber+1];
-	m_hintMessage = new LPSTR[m_hintNumber+1];
-	m_hintColor = new int[m_hintNumber+1];
-
-	for (int i=0;i<m_hintNumber;i++)
-	{
-		m_hintRect[i] = GetRectData(p);
-		p += 4;
-		m_hintMessage[i] = m_list->GetName(p);
-		p += 1;
-		m_hintColor[i] = GetNumber(p);
-		p += 1;
-	}
 }
-
-
 
 CStageData::~CStageData()
 {
@@ -80,47 +73,66 @@ CStageData::~CStageData()
 
 void CStageData::End(void)
 {
-	DELETEARRAY(m_targetRect);
-	DELETEARRAY(m_targetType);
+	DELETEARRAY(m_data);
 
-	DELETEARRAY(m_blockRect);
+	if (m_numberToWork != NULL)
+	{
+		for (int i=0;i<m_stageNumberMax;i++)
+		{
+			DELETEARRAY(m_numberToWork[i]);
+		}
 
-	DELETEARRAY(m_mirrorRect);
-	DELETEARRAY(m_mirrorType);
+		DELETEARRAY(m_numberToWork);
+	}
 
-	DELETEARRAY(m_hintRect);
-	DELETEARRAY(m_hintMessage);
-	DELETEARRAY(m_hintColor);
 
 	ENDDELETECLASS(m_list);
 }
 
-
-RECT CStageData::GetRectData(int n)
+int CStageData::StageToNumber(int stage,int subStage)
 {
-	RECT rc;
-	rc.left = atoi(m_list->GetName(n));
-	rc.top = atoi(m_list->GetName(n+1));
-	rc.right = atoi(m_list->GetName(n+2));
-	rc.bottom = atoi(m_list->GetName(n+3));
+	int n = 0;
 
-	return rc;
+	if (CheckStageNumber(stage,subStage))
+	{
+		n = m_numberToWork[stage][subStage];
+	}
+
+	//debugtest
+	if (n == 0) n = 1;
+
+	return n;
 }
 
-int CStageData::GetNumber(int n)
+BOOL CStageData::CheckStageNumber(int stage,int subStage)
 {
-	return atoi(m_list->GetName(n));
+	if ((stage >= 0) && (stage < m_stageNumberMax) && (subStage >= 0) && (subStage < m_stageSubNumberMax))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
-
-int CStageData::GetFontSize(int n)
+int CStageData::GetEnemyDeck(int stage,int subStage)
 {
-	int fontSize = m_hintRect[n].right;
-	if (fontSize == 0) fontSize = 16;
-
-	return fontSize;
+	int n = StageToNumber(stage,subStage);
+	return m_data[n*m_paramNumber + PARAM_ENEMYDECK];
 }
 
+int CStageData::GetWorld(int stage,int subStage)
+{
+	int n = StageToNumber(stage,subStage);
+	return m_data[n*m_paramNumber + PARAM_WORLD];
+}
+
+int CStageData::GetEnchant(int stage,int subStage,int k)
+{
+	int n = StageToNumber(stage,subStage);
+	return m_data[n*m_paramNumber + PARAM_ENCHANT + k];
+}
 
 /*_*/
+
+
 

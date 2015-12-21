@@ -158,7 +158,7 @@ int CGameTitle::Calcu(void)
 	{
 		if (nm == 0)
 		{
-			return ReturnFadeOut(PLAY_MODE);
+			return ReturnFadeOut(SELECTSTAGE_MODE);
 		}
 
 		if (nm == 1)

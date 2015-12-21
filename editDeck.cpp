@@ -86,8 +86,8 @@ CEditDeck::CEditDeck(CGame* lpGame) : CCommonGeneral(lpGame)
 	m_workMax = 0;
 	ExpandWork(1024);
 
-	m_baseCardPerPageX = 2;
-	m_baseCardPerPageY = 2;
+	m_baseCardPerPageX = 7;
+	m_baseCardPerPageY = 3;
 	m_baseCardPerPage = m_baseCardPerPageX * m_baseCardPerPageY;
 	
 	m_deckCardPrintNumberX = 7;
@@ -95,7 +95,7 @@ CEditDeck::CEditDeck(CGame* lpGame) : CCommonGeneral(lpGame)
 	m_deckCardNumber = 45;
 
 
-	m_deckCardPrint.x = 40;
+	m_deckCardPrint.x = 60;
 	m_deckCardPrint.y = 80;
 	m_deckCardNext.cx = 70;
 	m_deckCardNext.cy = 70;
@@ -103,7 +103,7 @@ CEditDeck::CEditDeck(CGame* lpGame) : CCommonGeneral(lpGame)
 	m_deckCardSize.cy = 64;
 
 
-	m_baseCardPrint.x = 40;
+	m_baseCardPrint.x = 60;
 	m_baseCardPrint.y = 600;
 	m_baseCardNext.cx = 70;
 	m_baseCardNext.cy = 70;

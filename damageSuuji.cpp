@@ -16,7 +16,7 @@
 CDamageSuuji::CDamageSuuji()
 {
 	CPicture* lpPic = CSystemPicture::GetSystemPicture("ta_damageSuuji");
-	m_suuji = new CSuuji(lpPic,16,16,3);
+	m_suuji = new CSuuji(lpPic,32,32,3,24);
 	m_dataMax = 100;
 	m_work = new SUUJIWORK[m_dataMax];
 	AllClear();
@@ -55,13 +55,34 @@ void CDamageSuuji::AddSuuji(int x,int y,int d,int col)
 		n = m_lastSet;
 	}
 
+	int countMax = 2000;
+	int countSpeed = 100;
+
+	if (d >= 10)
+	{
+		countMax = 2500;
+		countSpeed = 100 + (d-10)*5;
+	}
+	else if (d >= 20)
+	{
+		int dd = d;
+		if (dd>30) dd = 30;
+
+		countMax = 3000;
+		countSpeed = 150 + (dd-20)*5;
+		if (countSpeed > 200) countSpeed = 200;
+
+	}
+
+
 	m_work[n].flag = TRUE;
 	m_work[n].count = 0;
-	m_work[n].countMax = 30;
+	m_work[n].countMax = countMax;
 	m_work[n].x = x;
 	m_work[n].y = y;
 	m_work[n].data = d;
 	m_work[n].color = col;
+	m_work[n].countSpeed = countSpeed;
 
 	m_lastSet = n;
 	if (n >= m_dataNumber) m_dataNumber = n+1;
@@ -73,7 +94,7 @@ void CDamageSuuji::Calcu(int cnt)
 	{
 		if (m_work[i].flag)
 		{
-			m_work[i].count++;
+			m_work[i].count += m_work[i].countSpeed;
 			if (m_work[i].count >= m_work[i].countMax)
 			{
 				m_work[i].flag = FALSE;
@@ -104,8 +125,8 @@ void CDamageSuuji::Print(void)
 			int putY = m_work[i].y;
 			int c = m_work[i].count;
 			int color = m_work[i].color;
-			putY -= c;
-			putX -= 16*2;
+			putY -= c / 100;
+			putX -= 32*2;
 			m_suuji->Print(putX,putY,m_work[i].data,-1,color);
 
 		}

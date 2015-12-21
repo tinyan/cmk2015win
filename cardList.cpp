@@ -30,7 +30,19 @@ LPSTR CCardList::m_errorName = "ÉGÉâÅ[";
 //equip
 #define PARAM_EQUIPTYPE 9
 
+//item
+#define PARAM_ITEMTYPE 9
 
+//spell
+#define PARAM_SPELLTYPE 9
+
+//world
+#define PARAM_WORLDTYPE 9
+//1:attack
+
+//enchant
+#define PARAM_ENCHANTTYPE 9
+//0:attack 1:deffense 
 
 #define PARAM_RARE 21
 #define PARAM_EQUIPPIC 22
@@ -258,6 +270,26 @@ int CCardList::GetNumbers(int card)
 	return GetParamData(card,PARAM_NUMBERS);
 }
 
+int CCardList::GetWorldType(int card)
+{
+	return GetParamData(card,PARAM_WORLDTYPE);
+}
+
+int CCardList::GetEnchantType(int card)
+{
+	return GetParamData(card,PARAM_ENCHANTTYPE);
+}
+
+int CCardList::GetSpellType(int card)
+{
+	return GetParamData(card,PARAM_SPELLTYPE);
+}
+
+int CCardList::GetItemType(int card)
+{
+	return GetParamData(card,PARAM_ITEMTYPE);
+}
+
 LPSTR CCardList::GetEtcMes(int card)
 {
 	int type = GetType(card);
@@ -269,9 +301,25 @@ LPSTR CCardList::GetEtcMes(int card)
 		sprintf_s(m_etcMes,256,"%d/%d/%d",attack,deffense,hp);
 		return m_etcMes;
 	}
-	else
+	else if (type == 3)
 	{
+		//equip
+		int equipType = GetEquipType(card);
+		int param = 0;
+		if (equipType == 0)
+		{
+			param = GetAttack(card);
+		}
+		else if (equipType == 1)
+		{
+			param = GetDeffense(card);
+		}
 		
+		if (param != 0)
+		{
+			sprintf_s(m_etcMes,256,"%d",param);
+			return m_etcMes;
+		}
 	}
 
 	return NULL;

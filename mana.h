@@ -2,10 +2,12 @@
 #define __CMK2015WIN_MANA__
 
 
+class CPutChara;
+
 class CMana
 {
 public:
-	CMana();
+	CMana(int playerEnemy);
 	~CMana();
 	void End(void);
 
@@ -13,6 +15,7 @@ public:
 	void SetMana(int n,int mana);
 	void Clear(void);
 	int GetMana(int n);
+	int GetManaMax(int n);
 	BOOL UseMana(int n,int mana);
 	void AddLandPower(int n,int pw);
 	void AddMana(int n,int mana);
@@ -29,6 +32,9 @@ private:
 
 	int m_manaPower;
 	POINT m_point;
+	int m_playerEnemy;
+
+	CPutChara* m_manaPic;
 
 };
 

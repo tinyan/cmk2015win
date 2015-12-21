@@ -87,9 +87,11 @@
     <ClCompile Include="attackObjectControl.cpp" />
     <ClCompile Include="battleStatus.cpp" />
     <ClCompile Include="cardList.cpp" />
+    <ClCompile Include="clearData.cpp" />
     <ClCompile Include="damageSuuji.cpp" />
     <ClCompile Include="deckData.cpp" />
     <ClCompile Include="editDeck.cpp" />
+    <ClCompile Include="enchantControl.cpp" />
     <ClCompile Include="gacha.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameTitle.cpp" />
@@ -108,6 +110,8 @@
     <ClCompile Include="putPeople.cpp" />
     <ClCompile Include="saveDeck.cpp" />
     <ClCompile Include="selectDeck.cpp" />
+    <ClCompile Include="selectStage.cpp" />
+    <ClCompile Include="stageData.cpp" />
     <ClCompile Include="unit.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,9 +119,11 @@
     <ClInclude Include="attackObjectControl.h" />
     <ClInclude Include="battleStatus.h" />
     <ClInclude Include="cardList.h" />
+    <ClInclude Include="clearData.h" />
     <ClInclude Include="damageSuuji.h" />
     <ClInclude Include="deckData.h" />
     <ClInclude Include="editDeck.h" />
+    <ClInclude Include="enchantControl.h" />
     <ClInclude Include="gacha.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameTitle.h" />
@@ -137,6 +143,8 @@
     <ClInclude Include="putPeople.h" />
     <ClInclude Include="saveDeck.h" />
     <ClInclude Include="selectDeck.h" />
+    <ClInclude Include="selectStage.h" />
+    <ClInclude Include="stageData.h" />
     <ClInclude Include="unit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

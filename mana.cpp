@@ -7,14 +7,20 @@
 #include "..\..\systemNNN\nyanlib\include\allGeo.h"
 #include "..\..\systemNNN\nyanlib\include\allGraphics.h"
 
+#include "..\..\systemNNN\nnnUtilLib\systempicture.h"
+
+#include "putChara.h"
+
 #include "mana.h"
 
 
-CMana::CMana()
+CMana::CMana(int playerEnemy)
 {
+	m_playerEnemy = playerEnemy;
 	Clear();
 	m_point.x = 0;
 	m_point.y = 0;
+	m_manaPic = new CPutChara("sys\\ta_manaball",2,4);
 }
 
 CMana::~CMana()
@@ -24,6 +30,7 @@ CMana::~CMana()
 
 void CMana::End(void)
 {
+	ENDDELETECLASS(m_manaPic);
 }
 
 void CMana::Clear(void)
@@ -50,6 +57,11 @@ void CMana::SetMana(int n,int mana)
 int CMana::GetMana(int n)
 {
 	return m_mana[n];
+}
+
+int CMana::GetManaMax(int n)
+{
+	return m_manaMax[n];
 }
 
 void CMana::AddLandPower(int n,int pw)
@@ -117,33 +129,24 @@ void CMana::AddAllMana(int add)
 
 void CMana::Print(void)
 {
-	int rgb[3][3] = 
-	{
-		{255,255,255},
-		{0,255,0},
-		{255,0,0},
-	};
-
 	for (int n=0;n<=2;n++)
 	{
 		int mx = m_manaMax[n];
 		int mana = m_mana[n];
 
-		int r = rgb[n][0];
-		int g = rgb[n][1];
-		int b = rgb[n][2];
+		int s = 2*m_playerEnemy-1;
 
 		for (int i=0;i<mx;i++)
 		{
-			int x = m_point.x + 12 * i;
-			int y = m_point.y + 12 * n;
+			int x = m_point.x + 18 * i;
+			int y = m_point.y + 18 * n * s;
 			if (i<mana)
 			{
-				CAllGeo::BoxFill(x,y,10,10,r,g,b);
+				m_manaPic->Put(x,y,1,n);
 			}
 			else
 			{
-				CAllGeo::BoxFill(x+2,y+2,6,6,r,g,b);
+				m_manaPic->Put(x,y,0,n);
 			}
 		}
 	}

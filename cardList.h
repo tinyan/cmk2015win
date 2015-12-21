@@ -35,6 +35,11 @@ public:
 	int GetRare(int card);
 	LPSTR GetEtcMes(int card);
 
+	int GetWorldType(int card);
+	int GetEnchantType(int card);
+	int GetSpellType(int card);
+	int GetItemType(int card);
+
 	static LPSTR m_errorName;
 private:
 	int m_cardNumberMax;

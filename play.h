@@ -26,6 +26,8 @@ class CBattleStatus;
 class CItemStatus;
 class CDamageSuuji;
 class CPrintDamageEffect;
+class CEnchantControl;
+class CStageData;
 
 class CAttackObjectControl;
 
@@ -65,10 +67,14 @@ private:
 	CPrintDamageEffect* m_printDamageEffect;
 	CPutChara* m_itemPic;
 	CPutChara* m_hqPic;
-
+	CEnchantControl* m_enchantControl;
+	CStageData* m_stageData;
 
 
 	int m_playMode;
+
+	int m_stageNumber;
+	int m_stageSubNumber;
 
 	int CalcuPlayMode(void);
 	int CalcuUseCard(void);
@@ -96,6 +102,7 @@ private:
 	int GetOnPlace(POINT pt);
 	POINT GetHandPoint(int pl,int n);
 	BOOL CheckMana(int pl,int card);
+	BOOL CheckMaxMana(int pl,int card);
 	void UseMana(int pl,int card);
 
 	void ClearButton(void);
@@ -103,6 +110,10 @@ private:
 	void UseLandCard(int pl,int card);
 	void UsePeopleCard(int pl,int card);
 	void UseEquipItemCard(int pl,int card);
+	void UseItemCard(int pl,int card);
+	void UseSpellCard(int pl,int card);
+	void UseEnchantCard(int pl,int card);
+	void UseWorldCard(int pl,int card);
 
 	POINT m_debugPoint;
 	int m_debugPower[2];
@@ -133,8 +144,8 @@ private:
 	void GetLandPower(void);
 	void Attack(void);
 	void MoveAttackObject(void);
-	void AttackEnemy(int pl,int n,int attack);
-
+	void AttackEnemy(int pl,int n,int attack,BOOL magic = FALSE);
+	void HealPeople(int pl,int n,int heal);
 
 	BOOL CheckLegalTarget(int playerenemy,int n,int serial);
 	BOOL CheckLegalItem(int playerenemy,int n,int serial);
@@ -160,8 +171,32 @@ private:
 	void StartGameover(void);
 	void StartClear(void);
 
-
+	int m_enemyCount;
 	int m_lastCount;
+	void AddEnemyDropMessage(int card);
+	void AddEnemyUseMessage(int card);
+	void AddEnemyMessage(LPSTR mes);
+	int m_enemyMessageCount;
+	char m_enemyMessage[256];
+	
+	int m_worldCard;
+	int SearchExistEnemy(int enemy);
+
+	int GetSpellEffectByWorld(void);
+	int GetAttackEffectByWorld(void);
+
+	int m_helpCard;
+	int m_helpType;
+	void CheckHelpCard(POINT pt);
+	
+	int m_worldCardPrintX;
+	int m_worldCardPrintY;
+
+	float GetWorldSpeedEffect(void);
+	int GetWorldMulti(void);
+
+	void PrintHelpCard(void);
+	static char m_enchantTypeMessage[3][64];
 };
 
 

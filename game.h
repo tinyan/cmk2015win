@@ -15,6 +15,8 @@ class CHaveCard;
 class CCardList;
 class CDeckData;
 class CPutCard;
+class CStageData;
+class CClearData;
 
 //class CMakeParty;
 //class CPartyStatusList;
@@ -84,10 +86,16 @@ public:
 	CDeckData* GetDeckData(void){return m_deckData;}
 	CDeckData* GetEnemyDeckData(void){return m_enemyDeckData;}
 	CPutCard* GetPutCard(void){return m_putCard;}
+	CStageData* GetStageData(void){return m_stageData;}
+	CClearData* GetClearData(void){return m_clearData;}
 
 	void InitData(void);
 	void SetGachaCard(int card){m_gachaCard = card;}
 	int GetGachaCard(void){return m_gachaCard;}
+	int GetStage(void){return m_stage;}
+	int GetSubStage(void){return m_subStage;}
+	void SetStage(int stage,int subStage);
+
 private:
 	void CreateAllClass(void);
 //	void AfterInitNewGame(int uraMode = 0, BOOL demoFlag = FALSE);
@@ -102,10 +110,14 @@ private:
 	CDeckData* m_deckData;
 	CDeckData* m_enemyDeckData;
 	CPutCard* m_putCard;
-
+	CStageData* m_stageData;
+	CClearData* m_clearData;
 //	int m_selectedStage;
 	int m_deckNumber;
 	int m_gachaCard;
+
+	int m_stage;
+	int m_subStage;
 
 	int m_saveData[256];
 };

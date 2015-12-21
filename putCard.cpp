@@ -107,9 +107,11 @@ void CPutCard::PutCard(int x,int y,int card,int ps)
 		m_cardPicNumber = card;
 	}
 
-	SIZE size = m_cardPic->GetPicSize();
-	int sizeX = size.cx;
-	int sizeY = size.cy;
+//	SIZE size = m_cardPic->GetPicSize();
+//	int sizeX = size.cx;
+//	int sizeY = size.cy;
+	int sizeX = 256;
+	int sizeY = 384;
 
 	int putX = x - sizeX / 2;
 	int putY = y - sizeY / 2;
@@ -140,6 +142,10 @@ void CPutCard::PutCard(int x,int y,int card,int ps)
 	int type = m_cardList->GetType(card);
 
 	m_cardBase[baseType]->TransLucentBlt2(putX,putY,0,0,sizeX,sizeY,ps);
+	m_cardPic->TransLucentBlt2(putX+20,putY+40,0,0,240,192,ps);
+
+
+
 	m_rare->TransPut(putX+m_rarePrintX,putY+m_rarePrintY,rare,ps);
 
 	m_type->TransPut(putX+m_typePrintX,putY+m_typePrintY,type,ps);
