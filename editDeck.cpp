@@ -305,8 +305,8 @@ int CEditDeck::Calcu(void)
 		int nm = ProcessCommonButton(rt);
 		if (nm == 0)
 		{
-			m_deckData->Save(0);
-			return ReturnFadeOut(GAMETITLE_MODE);
+			m_game2->SetSelectDeckBackMode(EDITDECK_MODE);
+			return ReturnFadeOut(SAVEDECK_MODE);
 		}
 	}
 

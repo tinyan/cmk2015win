@@ -12,6 +12,12 @@
 #define PARAM_WORLD 3
 #define PARAM_ENCHANT 4
 
+#define PARAM_GACHA_COMMON 16
+#define PARAM_GACHA_RARE 22
+#define PARAM_GACHA_SUPERRARE 24
+
+#define PARAM_ADDHEX 8
+
 CStageData::CStageData()
 {
 	m_stageNumberMax = 16;
@@ -38,7 +44,7 @@ CStageData::CStageData()
 	for (int i=1;i<m_dataMax;i++)
 	{
 		int stage = atoi(m_list->GetName(i*m_paramNumber+0));
-		int stageSubNumber = atoi(m_list->GetName(i*m_paramNumber+0));
+		int stageSubNumber = atoi(m_list->GetName(i*m_paramNumber+1));
 		if ((stage >= 0) && (stage < m_stageNumberMax) && (stageSubNumber >= 0) && (stageSubNumber < m_stageSubNumberMax))
 		{
 			m_numberToWork[stage][stageSubNumber] = i;
@@ -63,6 +69,39 @@ CStageData::CStageData()
 		}
 	}
 
+	m_nextExistFlag = new BOOL*[m_stageNumberMax];
+	for (int i=0;i<m_stageNumberMax;i++)
+	{
+		m_nextExistFlag[i] = new BOOL[m_stageSubNumberMax];
+	}
+
+	m_subStageNumber = new int[m_stageNumberMax];
+
+	for (int stage=0;stage<m_stageNumberMax;stage++)
+	{
+		int subStageNumber = 1;
+
+		for (int subStage=0;subStage<m_stageSubNumberMax;subStage++)
+		{
+			BOOL f = FALSE;
+
+			if (CheckStageNumber(stage,subStage))
+			{
+				if (subStage < m_stageSubNumberMax-1)
+				{
+					int n = StageToNumber(stage,subStage+1);
+					if (n > 1)
+					{
+						f = TRUE;
+						subStageNumber++;
+					}
+				}
+			}
+
+			m_nextExistFlag[stage][subStage] = f;
+		}
+		m_subStageNumber[stage] = subStageNumber;
+	}
 
 }
 
@@ -73,6 +112,17 @@ CStageData::~CStageData()
 
 void CStageData::End(void)
 {
+	DELETEARRAY(m_subStageNumber);
+
+	if (m_nextExistFlag != NULL)
+	{
+		for (int i=0;i<m_stageNumberMax;i++)
+		{
+			DELETEARRAY(m_nextExistFlag[i]);
+		}
+		DELETEARRAY(m_nextExistFlag);
+	}
+
 	DELETEARRAY(m_data);
 
 	if (m_numberToWork != NULL)
@@ -130,6 +180,93 @@ int CStageData::GetEnchant(int stage,int subStage,int k)
 {
 	int n = StageToNumber(stage,subStage);
 	return m_data[n*m_paramNumber + PARAM_ENCHANT + k];
+}
+
+BOOL CStageData::CheckExistNextSubStage(int stage,int subStage)
+{
+	if (CheckStageNumber(stage,subStage))
+	{
+		return m_nextExistFlag[stage][subStage];
+	}
+	return FALSE;
+}
+
+int CStageData::GetSubStageNumber(int stage)
+{
+	return m_subStageNumber[stage];
+}
+
+int CStageData::GetGachaCard(int stage,int subStage)
+{
+	int tableNumber = 0;
+	int work[12*2];
+	int dv = 0;
+
+
+	int n = StageToNumber(stage,subStage);
+
+	for (int i=0;i<6;i++)
+	{
+		int p = 100;
+
+		int card = m_data[n*m_paramNumber + PARAM_GACHA_COMMON + i];
+		if (card > 0)
+		{
+			dv += p;
+			work[tableNumber*2] = card;
+			work[tableNumber*2+1] = dv;
+			tableNumber++;
+		}
+	}
+
+	for (int i=0;i<2;i++)
+	{
+		int p = 40;
+		int card = m_data[n*m_paramNumber + PARAM_GACHA_RARE + i];
+		if (card > 0)
+		{
+			dv += p;
+			work[tableNumber*2] = card;
+			work[tableNumber*2+1] = dv;
+			tableNumber++;
+		}
+	}
+
+	for (int i=0;i<2;i++)
+	{
+		int p = 20;
+		int card = m_data[n*m_paramNumber + PARAM_GACHA_SUPERRARE + i];
+		if (card > 0)
+		{
+			dv += p;
+			work[tableNumber*2] = card;
+			work[tableNumber*2+1] = dv;
+			tableNumber++;
+		}
+	}
+
+	if (dv == 0) return 100;
+	int r = rand() % dv;
+
+	for (int i=0;i<tableNumber;i++)
+	{
+		if (r<work[i*2+1])
+		{
+			return work[i*2];
+		}
+	}
+
+	return 100;
+}
+
+int CStageData::GetAddHex(int stage,int subStage,int type)
+{
+	if (CheckStageNumber(stage,subStage))
+	{
+		int n = StageToNumber(stage,subStage);
+		return m_data[n*m_paramNumber + PARAM_ADDHEX + type];
+	}
+	return 0;
 }
 
 /*_*/

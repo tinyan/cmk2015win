@@ -22,6 +22,13 @@
 #include "..\..\systemNNN\nnnUtilLib\superButtonPicture.h"
 #include "..\..\systemNNN\nnnUtilLib\commonButton.h"
 
+#include "..\..\systemNNN\nnnUtilLib\superButtonPicture.h"
+#include "..\..\systemNNN\nnnUtilLib\commonButton.h"
+#include "..\..\systemNNN\nnnUtilLib\commonButtonGroup.h"
+#include "..\..\systemNNN\nnnUtilLib\commonUpDownButtonGroup.h"
+#include "..\..\systemNNN\nnnUtilLib\commonBackButton.h"
+
+
 #include "..\..\systemNNN\nnnUtilLib\suuji.h"
 
 
@@ -50,17 +57,19 @@
 //#include "playStageType2.h"
 //#include "playStageType3.h"
 
-
-
+#include "deckData.h"
+#include "selectDeck.h"
 #include "saveDeck.h"
 #include "game.h"
 
 
-CSaveDeck::CSaveDeck(CGame* lpGame) : CCommonGeneral(lpGame)
+CSaveDeck::CSaveDeck(CGame* lpGame) : CSelectDeck(lpGame,1)
 {
-	m_game2 = lpGame;
-	m_message = m_game->GetMyMessage();
+	
+	SetClassNumber(SAVEDECK_MODE);
+	LoadSetupFile("savedeck",256);
 
+	CreateBackButton();
 
 }
 
@@ -73,9 +82,13 @@ void CSaveDeck::End(void)
 {
 }
 
-
+/*
 int CSaveDeck::Init(void)
 {
+	CSelectDeck::Init();
+
+	LoadBackButtonPic();
+	m_back->Init();
 
 	return -1;
 }
@@ -87,6 +100,16 @@ int CSaveDeck::Calcu(void)
 
 	POINT pt = m_mouseStatus->GetZahyo();
 
+	int rt = m_back->Calcu(m_inputStatus);
+	if (rt != NNNBUTTON_NOTHING)
+	{
+		int nm = ProcessCommonButton(rt);
+		if (nm == 0)
+		{
+			int backMode = m_game2->GetSelectDeckBackMode();
+			return ReturnFadeOut(backMode);
+		}
+	}
 
 
 
@@ -113,6 +136,16 @@ int CSaveDeck::Print(void)
 
 void CSaveDeck::FinalExitRoutine(void)
 {
+}
+*/
+
+int CSaveDeck::ProcessSave(void)
+{
+	m_game2->SetDeckNumber(m_onNumber);
+	m_deckData->Save(m_onNumber);
+
+
+	return GAMETITLE_MODE;
 }
 
 

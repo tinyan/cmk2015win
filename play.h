@@ -80,6 +80,8 @@ private:
 	int CalcuUseCard(void);
 	int CalcuWin(void);
 	int CalcuLose(void);
+	int CalcuStart(void);
+
 	void UseCardRoutine(int pl = 0,int place = -1);
 	void DropCardRoutine(int pl = 0,int place = -1);
 
@@ -194,6 +196,11 @@ private:
 
 	float GetWorldSpeedEffect(void);
 	int GetWorldMulti(void);
+
+	int m_startCount;
+
+	CSuuji* m_stageSuuji;
+	CPicture* m_stagePlate;
 
 	void PrintHelpCard(void);
 	static char m_enchantTypeMessage[3][64];

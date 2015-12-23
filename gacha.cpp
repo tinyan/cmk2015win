@@ -55,6 +55,8 @@
 #include "haveCard.h"
 #include "putCard.h"
 
+#include "stageData.h"
+
 #include "gacha.h"
 #include "game.h"
 
@@ -70,6 +72,7 @@ CGacha::CGacha(CGame* lpGame) : CCommonGeneral(lpGame)
 	m_haveCard = m_game2->GetHaveCard();
 	m_putCard = m_game2->GetPutCard();
 	m_cardList = m_game2->GetCardList();
+	m_stageData = m_game2->GetStageData();
 
 	m_limit1 = 30;
 	m_limit2 = 90;
@@ -95,6 +98,7 @@ int CGacha::Init(void)
 	m_getCard = m_game2->GetGachaCard();
 	int n = m_haveCard->GetCard(m_getCard);
 	n += 1;
+	if (n > 99) n = 99;
 	m_haveCard->SetCard(m_getCard,n);
 	m_haveCard->Save();
 
@@ -121,7 +125,19 @@ int CGacha::Calcu(void)
 	{
 		if (m_mouseStatus->CheckClick())
 		{
-			return ReturnFadeOut(GAMETITLE_MODE);
+			int stage = m_game2->GetStage();
+			int subStage = m_game2->GetSubStage();
+
+			if (m_stageData->CheckExistNextSubStage(stage,subStage))
+			{
+				subStage++;
+				m_game2->SetStage(stage,subStage);
+				return ReturnFadeOut(PLAY_MODE);
+			}
+			else
+			{
+				return ReturnFadeOut(GAMETITLE_MODE);
+			}
 		}
 	}
 

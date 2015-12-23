@@ -14,7 +14,7 @@ public:
 	BOOL Save(void);
 	int GetData(int stage,int subStage);
 	void SetData(int stage,int subStage,int data);
-
+	void AddData(int stage,int subStage,int data);
 private:
 	int** m_data;
 	int m_stageMax;

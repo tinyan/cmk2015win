@@ -10,24 +10,23 @@ class CPicture;
 
 class CMyMessage;
 class CNameList;
+class CSelectDeck;
 
-class CLoadDeck : public CCommonGeneral
+class CLoadDeck : public CSelectDeck
 {
 public:
 	CLoadDeck(CGame* lpGame);
 	~CLoadDeck();
 	void End(void);
 
-	int Init(void);
-	int Calcu(void);
-	int Print(void);
-
-
-	void FinalExitRoutine(void);
+//	int Init(void);
+//	int Calcu(void);
+//	int Print(void);
+//	void FinalExitRoutine(void);
+	int ProcessLoad(void);
 
 private:
-	CGame* m_game2;
-	CMyMessage* m_message;
+	
 
 
 };

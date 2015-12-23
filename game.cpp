@@ -55,6 +55,7 @@
 #include "play.h"
 #include "gameTitle.h"
 
+#include "selectDeck.h"
 #include "editDeck.h"
 #include "loadDeck.h"
 #include "saveDeck.h"
@@ -392,6 +393,22 @@ void CGame::SetStage(int stage,int subStage)
 
 	m_stage = stage;
 	m_subStage = subStage;
+}
+
+void CGame::SetSelectDeckBackMode(int mode)
+{
+	m_selectDeckBackMode = mode;
+}
+
+void CGame::SetDeckNumber(int n)
+{
+	m_deckNumber = n;
+}
+
+void CGame::ClearStage(int stage,int subStage)
+{
+	m_clearData->AddData(stage,subStage,1);
+	m_clearData->Save();
 }
 
 /*_*/

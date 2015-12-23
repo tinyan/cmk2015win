@@ -80,7 +80,7 @@ CGameTitle::CGameTitle(CGame* lpGame) : CCommonGeneral(lpGame)
 	m_game2 = lpGame;
 	m_message = m_game->GetMyMessage();
 
-	m_basicButtonKosuu = 3;
+	m_basicButtonKosuu = 4;
 	m_menuButtonSetup = new CMenuButtonSetup(m_setup,m_basicButtonKosuu);
 
 	m_menu = new CMenuButtonGroup(m_menuButtonSetup);
@@ -167,6 +167,12 @@ int CGameTitle::Calcu(void)
 		}
 
 		if (nm == 2)
+		{
+			m_game2->SetSelectDeckBackMode(GAMETITLE_MODE);
+			return ReturnFadeOut(LOADDECK_MODE);
+		}
+
+		if (nm == 3)
 		{
 			m_game2->InitData();
 			m_menu->Init();

@@ -10,24 +10,24 @@ class CPicture;
 
 class CMyMessage;
 class CNameList;
+class CSelectDeck;
 
-class CSaveDeck : public CCommonGeneral
+class CSaveDeck : public CSelectDeck
 {
 public:
 	CSaveDeck(CGame* lpGame);
 	~CSaveDeck();
 	void End(void);
 
-	int Init(void);
-	int Calcu(void);
-	int Print(void);
+//	int Init(void);
+//	int Calcu(void);
+//	int Print(void);
+//	void FinalExitRoutine(void);
 
-
-	void FinalExitRoutine(void);
+	int ProcessSave(void);
 
 private:
-	CGame* m_game2;
-	CMyMessage* m_message;
+
 
 
 };

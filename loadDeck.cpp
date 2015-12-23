@@ -15,6 +15,14 @@
 #include "..\..\systemNNN\nnnLib\commonSystemParamName.h"
 #include "..\..\systemNNN\nnnUtilLib\nnnButtonStatus.h"
 
+
+#include "..\..\systemNNN\nnnUtilLib\superButtonPicture.h"
+#include "..\..\systemNNN\nnnUtilLib\commonButton.h"
+#include "..\..\systemNNN\nnnUtilLib\commonButtonGroup.h"
+#include "..\..\systemNNN\nnnUtilLib\commonUpDownButtonGroup.h"
+#include "..\..\systemNNN\nnnUtilLib\commonBackButton.h"
+
+
 #include "..\..\systemNNN\nnnUtilLib\myMouseStatus.h"
 #include "..\..\systemNNN\nnnUtilLib\mymessage.h"
 #include "..\..\systemNNN\nnnUtilLib\nameList.h"
@@ -50,17 +58,18 @@
 //#include "playStageType2.h"
 //#include "playStageType3.h"
 
-
-
+#include "deckData.h"
+#include "selectDeck.h"
 #include "loadDeck.h"
 #include "game.h"
 
 
-CLoadDeck::CLoadDeck(CGame* lpGame) : CCommonGeneral(lpGame)
+CLoadDeck::CLoadDeck(CGame* lpGame) : CSelectDeck(lpGame,0)
 {
-	m_game2 = lpGame;
-	m_message = m_game->GetMyMessage();
+	SetClassNumber(LOADDECK_MODE);
+	LoadSetupFile("loaddeck",256);
 
+	CreateBackButton();
 
 }
 
@@ -73,9 +82,13 @@ void CLoadDeck::End(void)
 {
 }
 
-
+/*
 int CLoadDeck::Init(void)
 {
+	CSelectDeck::Init();
+
+	LoadBackButtonPic();
+	m_back->Init();
 
 	return -1;
 }
@@ -93,8 +106,9 @@ int CLoadDeck::Calcu(void)
 
 	return -1;
 }
+*/
 
-
+/*
 int CLoadDeck::Print(void)
 {
 	CAreaControl::SetNextAllPrint();
@@ -109,11 +123,22 @@ int CLoadDeck::Print(void)
 
 	return -1;
 }
+*/
 
-
-
+/*
 void CLoadDeck::FinalExitRoutine(void)
 {
+}
+*/
+
+
+int CLoadDeck::ProcessLoad(void)
+{
+	m_game2->SetDeckNumber(m_onNumber);
+	m_deckData->Load(m_onNumber);
+
+
+	return GAMETITLE_MODE;
 }
 
 

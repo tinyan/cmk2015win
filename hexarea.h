@@ -23,7 +23,10 @@ public:
 	POINT GetHexPoint(int nx,int ny);
 	void Occupy(POINT pt,int playerenemy,int pw);
 	int GetLandPower(int playerenemy);
+	void AddRandomHex(int type);
+	static int m_houkouTable[6*2];
 
+	BOOL CheckInArea(int x,int y);
 private:
 	CPutChara* m_hexPic;
 	SIZE m_size;

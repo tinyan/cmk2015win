@@ -162,6 +162,14 @@ void CClearData::SetData(int stage,int subStage,int data)
 	}
 }
 
+void CClearData::AddData(int stage,int subStage,int data)
+{
+	if (CheckStage(stage,subStage))
+	{
+		data += m_data[stage][subStage];
+		SetData(stage,subStage,data);
+	}
+}
 
 /*_*/
 

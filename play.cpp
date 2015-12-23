@@ -25,6 +25,9 @@
 #include "..\..\systemNNN\nnnUtilLib\commonButton.h"
 #include "..\..\systemNNN\nnnUtilLib\commonButtonGroup.h"
 
+#include "..\..\systemNNN\nnnUtilLib\commonBackButton.h"
+
+#include "..\..\systemNNN\nnnUtilLib\systempicture.h"
 #include "..\..\systemNNN\nnnUtilLib\suuji.h"
 
 
@@ -84,6 +87,8 @@
 #define NEXT_OR_EXIT_MODE 4
 
 #define USECARD_MODE 5
+#define START_MODE 6
+
 
 char CPlay::m_enchantTypeMessage[3][64]=
 {
@@ -111,6 +116,11 @@ CPlay::CPlay(CGame* lpGame) : CCommonGeneral(lpGame)
 	m_attackObjectControl = new CAttackObjectControl();
 	m_enchantControl = new CEnchantControl(m_cardList,m_putCard);
 
+	m_stagePlate = new CPicture("sys\\ta_play_stagePlate");
+	m_stageSuuji = new CSuuji(CSystemPicture::GetSystemPicture("ta_stageSuuji"),64,64,1);
+
+	CreateBackButton();
+	m_back->SetCancelButtonFlag(FALSE);
 
 	m_useButton = new CCommonButton(m_setup,"use");
 	m_dropButton = new CCommonButton(m_setup,"drop");
@@ -198,7 +208,7 @@ CPlay::CPlay(CGame* lpGame) : CCommonGeneral(lpGame)
 	m_tikeiSpeed[2] = 0.6f;
 	m_tikeiSpeed[3] = 0.4f;
 
-	m_worldCardPrintX = 70;
+	m_worldCardPrintX = 500;
 	m_worldCardPrintY = 480;
 }
 
@@ -253,6 +263,9 @@ void CPlay::End(void)
 	ENDDELETECLASS(m_dropButton);
 	ENDDELETECLASS(m_useButton);
 
+	ENDDELETECLASS(m_stagePlate);
+	ENDDELETECLASS(m_stageSuuji);
+
 	ENDDELETECLASS(m_enchantControl);
 	ENDDELETECLASS(m_attackObjectControl);
 	ENDDELETECLASS(m_printDamageEffect);
@@ -272,8 +285,8 @@ int CPlay::Init(void)
 	m_itemStatusNumber[0] = 0;
 	m_itemStatusNumber[1] = 0;
 
-	m_stageNumber = 0;
-	m_stageSubNumber = 0;
+	m_stageNumber = m_game2->GetStage();
+	m_stageSubNumber = m_game2->GetSubStage();
 
 	for (int i=0;i<1;i++)
 	{
@@ -296,6 +309,9 @@ int CPlay::Init(void)
 			m_itemStatus[pl][i]->Clear();
 		}
 	}
+
+	int deckNumber = m_game2->GetDeckNumber();
+	m_deckData[0]->Load(deckNumber);
 
 	int enemyDeckNumber = m_stageData->GetEnemyDeck(m_stageNumber,m_stageSubNumber);
 	m_deckData[1]->Load(enemyDeckNumber,TRUE);
@@ -377,6 +393,17 @@ int CPlay::Init(void)
 		}
 	}
 
+	for (int type = 1;type < 4;type++)
+	{
+		int n = m_stageData->GetAddHex(m_stageNumber,m_stageSubNumber,type);
+		for (int i=0;i<n;i++)
+		{
+			m_hexArea->AddRandomHex(type);
+		}
+	}
+
+
+
 	m_damageSuuji->AllClear();
 	m_printDamageEffect->Clear();
 	m_attackObjectControl->Clear();
@@ -390,7 +417,8 @@ int CPlay::Init(void)
 
 	m_enemyCount = 0;
 	m_enemyMessageCount = 0;
-	m_playMode = PLAY_MODE;
+	m_startCount = 0;
+	m_playMode = START_MODE;
 	
 	
 	m_worldCard = m_stageData->GetWorld(m_stageNumber,m_stageSubNumber);
@@ -402,6 +430,9 @@ int CPlay::Init(void)
 			m_enchantControl->AddEnchant(1,enemyEnchant);
 		}
 	}
+
+	LoadBackButtonPic();
+	m_back->Init();
 
 	return -1;
 }
@@ -417,22 +448,26 @@ int CPlay::Calcu(void)
 
 	m_debugPoint = m_hexArea->GetAreaBlock((float)pt.x,(float)pt.y);
 	//debug
-	if (m_mouseStatus->CheckClick(1))
-	{
-		return ReturnFadeOut(GAMETITLE_MODE);
-	}
-
 	if (m_mouseStatus->CheckClick(2))
 	{
-//		int card = 100 + (rand() % 3);
-//		m_game2->SetGachaCard(card);
-//		return ReturnFadeOut(GACHA_MODE);
+#if _DEBUG
+		StartClear();
+#endif
+
+//		return ReturnFadeOut(GAMETITLE_MODE);
 	}
+
+
 
 	m_damageSuuji->Calcu();
 	m_printDamageEffect->Calcu();
 	m_attackObjectControl->CutLast();
 
+
+	if (m_playMode == START_MODE)
+	{
+		return CalcuStart();
+	}
 
 	if (m_playMode == PLAY_MODE)
 	{
@@ -463,6 +498,19 @@ int CPlay::CalcuPlayMode(void)
 {
 
 	POINT pt = m_mouseStatus->GetZahyo();
+
+	if (1)
+	{
+		int rt = m_back->Calcu(m_inputStatus);
+		if (rt != -1)
+		{
+			int nm = ProcessCommonButton(rt);
+			if (nm == 0)
+			{
+				return ReturnFadeOut(GAMETITLE_MODE);
+			}
+		}
+	}
 
 	if (m_mouseStatus->CheckClick(0))
 	{
@@ -1760,7 +1808,7 @@ int CPlay::CalcuWin(void)
 		m_lastCount = 100;
 		if (m_mouseStatus->CheckClick())
 		{
-			int card = 100 + (rand() % 3);
+			int card = m_stageData->GetGachaCard(m_stageNumber,m_stageSubNumber);
 			m_game2->SetGachaCard(card);
 			return GACHA_MODE;
 		}
@@ -1782,6 +1830,18 @@ int CPlay::CalcuLose(void)
 	}
 
 	return -1;
+}
+
+int CPlay::CalcuStart(void)
+{
+	m_startCount++;
+	if ((m_startCount >= 100) || (m_mouseStatus->CheckClick()))
+	{
+		m_playMode = PLAY_MODE;
+	}
+	return -1;
+
+
 }
 
 int CPlay::Print(void)
@@ -1971,6 +2031,19 @@ int CPlay::Print(void)
 		PrintHelpCard();
 	}
 
+	if (m_playMode == START_MODE)
+	{
+		int putX = 70;
+		int putY = 480-128;
+		int dy = 0;
+		if (m_startCount < 50) dy = -(50-m_startCount) * 10;
+		putY += dy;
+
+		m_stagePlate->Put(putX,putY,TRUE);
+		m_stageSuuji->Print(putX+64,putY+128,m_stageNumber+1);
+		m_stageSuuji->Print(putX+256,putY+128,m_stageSubNumber+1);
+	}
+
 
 	if (m_enemyMessageCount > 0)
 	{
@@ -1984,6 +2057,11 @@ int CPlay::Print(void)
 
 		CAllGeo::TransBoxFill(putX+2,putY+2,400,30,16,32,255,30);
 		m_message->PrintMessage(putX+5,putY+5,m_enemyMessage,24);
+	}
+
+	if (m_playMode == PLAY_MODE)
+	{
+		m_back->Print();
 	}
 
 	if (m_playMode == USECARD_MODE)
@@ -2335,6 +2413,8 @@ void CPlay::StartClear(void)
 {
 	if (m_playMode != GAMEOVER_MODE)
 	{
+		m_game2->ClearStage(m_stageNumber,m_stageSubNumber);
+
 		m_playMode = STAGECLEAR_MODE;
 		m_commonParts->LoadDWQ("sys\\ta_play_win");
 		m_lastCount = 0;

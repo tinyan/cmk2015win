@@ -13,7 +13,7 @@ class CHaveCard;
 class CPutCard;
 class CPutChara;
 class CCardList;
-
+class CStageData;
 
 class CGacha : public CCommonGeneral
 {
@@ -45,6 +45,8 @@ private:
 	CPicture* m_getPic;
 	int m_limit1;
 	int m_limit2;
+	CStageData* m_stageData;
+
 };
 
 

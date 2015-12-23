@@ -13,6 +13,11 @@
 #include "hexarea.h"
 
 
+int CHexArea::m_houkouTable[]=
+{
+	0,-2,1,-1,1,1,0,2,-1,1,-1,-1
+};
+
 CHexArea::CHexArea()
 {
 	m_size.cx = 64;
@@ -259,6 +264,66 @@ int CHexArea::GetLandPower(int playerenemy)
 		}
 	}
 	return pw;
+}
+
+void CHexArea::AddRandomHex(int type)
+{
+	int startX = rand() % 14;
+	int startY = rand() % 30;
+	startX += 1;
+	startY += 1;
+
+	if (((startX+startY) & 1) == 1)
+	{
+		if (startY>16)
+		{
+			startY--;
+		}
+		else
+		{
+			startY++;
+		}
+	}
+
+
+	for (int i=0;i<6;i++)
+	{
+		int x = startX + m_houkouTable[i*2];
+		int y = startX + m_houkouTable[i*2+1];
+		if (CheckInArea(x,y))
+		{
+			m_type[y][x] = type;
+		}
+	}
+
+
+	int k = 0;
+	int xx = startX;
+	int yy = startY;
+	for (int i=0;i<100;i++)
+	{
+		int r = rand() % 6;
+		int x = xx + m_houkouTable[r*2];
+		int y = yy + m_houkouTable[r*2+1];
+		if (CheckInArea(x,y))
+		{
+			xx = x;
+			yy = y;
+			m_type[y][x] = type;
+			k++;
+			if (k>=10) break;
+		}
+	}
+
+}
+
+BOOL CHexArea::CheckInArea(int x,int y)
+{
+	if (x<0) return FALSE;
+	if (y<0) return FALSE;
+	if (x>=32) return FALSE;
+	if (y>=64) return FALSE;
+	return TRUE;
 }
 
 /*_*/

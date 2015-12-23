@@ -95,6 +95,11 @@ public:
 	int GetStage(void){return m_stage;}
 	int GetSubStage(void){return m_subStage;}
 	void SetStage(int stage,int subStage);
+	void SetSelectDeckBackMode(int mode);
+	int GetSelectDeckBackMode(void){return m_selectDeckBackMode;}
+	int GetDeckNumber(void){return m_deckNumber;}
+	void SetDeckNumber(int n);
+	void ClearStage(int stage,int subStage);
 
 private:
 	void CreateAllClass(void);
@@ -118,6 +123,8 @@ private:
 
 	int m_stage;
 	int m_subStage;
+	int m_selectDeckBackMode;
+
 
 	int m_saveData[256];
 };

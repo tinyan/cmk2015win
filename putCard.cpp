@@ -28,7 +28,7 @@ CPutCard::CPutCard(CMyMessage* message,CCardList* cardList)
 		m_card[i] = NULL;
 	}
 
-	m_card[0] = new CPutChara("sys\\cardseat0",4,4);
+//	m_card[0] = new CPutChara("sys\\cardseat0",4,4);
 
 	m_miniCard = new CPutChara("sys\\ta_minicardseat",16,16);
 
