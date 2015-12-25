@@ -54,6 +54,10 @@ CPutCard::CPutCard(CMyMessage* message,CCardList* cardList)
 	m_textPrintY = 260;
 	m_textNextY = 17;
 
+	m_plainTextPrintX = 28;
+	m_plainTextPrintY = 320;
+	m_plainTextNextY = 13;
+
 	m_type = new CPutChara("sys\\ta_type",1,8);
 	m_typePrintX = 84;
 	m_typePrintY = 244;
@@ -68,6 +72,11 @@ CPutCard::CPutCard(CMyMessage* message,CCardList* cardList)
 	m_etcNextX = 16;
 
 	m_etcSuuji = new CSuuji(CSystemPicture::GetSystemPicture("ta_etcsuuji"),16,16,3);
+
+	m_flag = new CPutChara("sys\\ta_flag",1,1);
+	m_flagPrintX = 20;
+	m_flagPrintY = 362;
+	m_flagNextX = 16;
 }
 
 CPutCard::~CPutCard()
@@ -77,6 +86,7 @@ CPutCard::~CPutCard()
 
 void CPutCard::End(void)
 {
+	ENDDELETECLASS(m_flag);
 	ENDDELETECLASS(m_etcSuuji);
 	ENDDELETECLASS(m_cardMana);
 	ENDDELETECLASS(m_type);
@@ -199,7 +209,14 @@ void CPutCard::PutCard(int x,int y,int card,int ps)
 			}
 		}
 
-		//Ží—Þ
+		for (int i=0;i<2;i++)
+		{
+			LPSTR mes = m_cardList->GetPlainText(card,i);
+			if ((*mes) != '@')
+			{
+				m_message->PrintMessage(putX+m_plainTextPrintX,putY+m_plainTextPrintY + m_plainTextNextY * i,mes,12,0,0,0);
+			}
+		}
 
 	}
 
@@ -217,12 +234,37 @@ void CPutCard::PutCard(int x,int y,int card,int ps)
 				int d = (int)c;
 				d -= '0';
 				if (c == '/') d = 11;
+				if (c == '%') d = 12;
 				int x = putX + m_etcPrintX - (ln-1-i) * m_etcNextX;
 				int y = putY + m_etcPrintY;
 				m_etcSuuji->Put(x,y,d);
 
 			}
 
+		}
+	}
+
+	//flag
+	int numbers = m_cardList->GetNumbers(card);
+	if (numbers > 1)
+	{
+		BOOL bad = FALSE;
+
+		if (type == 7)
+		{
+			int subType = m_cardList->GetWorldType(card);
+			if (subType == 5)
+			{
+				bad = TRUE;
+			}
+		}
+
+		if (!bad)
+		{
+			for (int i=0;i<numbers;i++)
+			{
+				m_flag->TransPut(putX+m_flagPrintX+m_flagNextX*i,putY+m_flagPrintY,0,0,ps);
+			}
 		}
 	}
 }

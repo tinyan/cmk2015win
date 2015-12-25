@@ -17,6 +17,7 @@ public:
 	int GetMiniCardNumber(int card);
 	LPSTR GetFilename(int card);
 	LPSTR GetText(int card,int n);
+	LPSTR GetPlainText(int card,int n);
 	int GetLandPower(int card,int manaType);
 
 	int GetEquipType(int card);

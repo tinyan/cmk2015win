@@ -17,6 +17,7 @@ class CLandTimer;
 
 class CCommonButton;
 class CDeckData;
+class CPutChata;
 class CPutCard;
 class CCardList;
 class CMana;
@@ -56,6 +57,8 @@ private:
 	CDeckData* m_deckData[2];
 	CPutCard* m_putCard;
 	CCardList* m_cardList;
+
+	CPutChara* m_tama;
 
 	CCommonButton* m_useButton;
 	CCommonButton* m_dropButton;
@@ -186,6 +189,7 @@ private:
 
 	int GetSpellEffectByWorld(void);
 	int GetAttackEffectByWorld(void);
+	int GetDeffenseEffectByWorld(void);
 
 	int m_helpCard;
 	int m_helpType;

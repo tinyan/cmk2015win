@@ -27,6 +27,8 @@
 #include "..\..\systemNNN\nnnUtilLib\mySaveFolder.h"
 #include "..\..\systemNNN\nyanLib\INCLUDE\\myFile.h"
 
+#include "..\..\systemNNN\nnnUtilLib\systempicture.h"
+
 #include "mode.h"
 
 //#include "clearStage.h"
@@ -70,13 +72,14 @@ CSelectDeck::CSelectDeck(CGame* lpGame,int loadsave) : CCommonGeneral(lpGame)
 	m_dataExistFlag = new BOOL[m_deckMax];
 	m_enableFlag = new BOOL[m_deckMax];
 
-	m_deckPrintX = 10;
-	m_deckPrintY = 10;
+	m_deckPrintX = 64;
+	m_deckPrintY = 64;
 	m_deckNextX = 0;
 	m_deckNextY = 70;
 	m_deckSizeX = 400;
 	m_deckSizeY = 64;
 
+	m_suuji = new CSuuji(CSystemPicture::GetSystemPicture("ta_selectdeck_number"),64,64,1);
 }
 
 CSelectDeck::~CSelectDeck()
@@ -86,6 +89,7 @@ CSelectDeck::~CSelectDeck()
 
 void CSelectDeck::End(void)
 {
+	ENDDELETECLASS(m_suuji);
 	DELETEARRAY(m_enableFlag);
 	DELETEARRAY(m_dataExistFlag);
 }
@@ -125,6 +129,17 @@ int CSelectDeck::Init(void)
 
 	LoadBackButtonPic();
 	m_back->Init();
+
+	if (m_classNumber == SAVEDECK_MODE)
+	{
+		m_commonBG->LoadDWQ("sys\\ta_selectdeck_save_bg");
+	}
+	else
+	{
+		m_commonBG->LoadDWQ("sys\\ta_selectdeck_load_bg");
+	}
+	
+	m_commonParts->LoadDWQ("sys\\ta_selectdeck_plate");
 
 	return -1;
 }
@@ -176,35 +191,42 @@ int CSelectDeck::Print(void)
 {
 	CAreaControl::SetNextAllPrint();
 
-	CAllGraphics::FillScreen();
+//	CAllGraphics::FillScreen();
+	m_commonBG->Put(0,0,FALSE);
 
-	m_message->PrintMessage(10,10,"デッキ選択画面");
+//	m_message->PrintMessage(10,10,"デッキ選択画面");
 
 	for (int i=0;i<m_deckMax;i++)
 	{
 		POINT pt = GetDeckPoint(i);
 
 		//通常 on ??? nodata
-		int rgb[][4] = {{0,255,0},{255,255,255},{0,0,0},{127,127,127}};
+
 		int md = 0;
-		if (!m_dataExistFlag[i])
+		if (m_dataExistFlag[i])
 		{
-			md = 3;
+			md = 1;
 		}
 
 		if (m_onNumber == i)
 		{
 			if (m_enableFlag[i])
 			{
-				md = 1;
+				md = 2;
 			}
 		}
 
-		int r = rgb[md][0];
-		int g = rgb[md][1];
-		int b = rgb[md][2];
+		int sizeX = m_deckSizeX;
+		int sizeY = m_deckSizeY;
+		int srcX = 0;
+		int srcY = sizeY * md;
 
-		CAllGeo::BoxFill(pt.x,pt.y,m_deckSizeX,m_deckSizeY,r,g,b);
+		m_commonParts->Blt(pt.x,pt.y,srcX,srcY,sizeX,sizeY,TRUE);
+		if (md != 0)
+		{
+			m_suuji->Print(pt.x+256,pt.y,i+1);
+		}
+//		CAllGeo::BoxFill(pt.x,pt.y,m_deckSizeX,m_deckSizeY,r,g,b);
 	}
 
 	m_back->Print();

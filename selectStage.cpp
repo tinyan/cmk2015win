@@ -128,6 +128,11 @@ int CSelectStage::Init(void)
 	m_back->Init();
 
 	m_onNumber = -1;
+
+	m_commonParts->LoadDWQ("sys\\ta_selectstage_scroll");
+	m_scrollX = 0;
+	m_scrollY = 0;
+
 	return -1;
 }
 
@@ -181,9 +186,23 @@ int CSelectStage::Print(void)
 	CAreaControl::SetNextAllPrint();
 
 
-	CAllGraphics::FillScreen(0,0,0);
-	m_message->PrintMessage(10,10,"ステージ選択");
+//	CAllGraphics::FillScreen(0,0,0);
+//	m_message->PrintMessage(10,10,"ステージ選択");
 
+	m_scrollX += 5;
+	m_scrollX %= 200;
+	m_scrollY += 2;
+	m_scrollY %= 200;
+
+	for (int j=-1;j<5;j++)
+	{
+		for (int i=-1;i<3;i++)
+		{
+			int x = i*200+m_scrollX;
+			int y = j*200+m_scrollY;
+			m_commonParts->Put(x,y,FALSE);
+		}
+	}
 
 	for (int stage = 0;stage < m_existStage; stage++)
 	{

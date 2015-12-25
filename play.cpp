@@ -118,6 +118,7 @@ CPlay::CPlay(CGame* lpGame) : CCommonGeneral(lpGame)
 
 	m_stagePlate = new CPicture("sys\\ta_play_stagePlate");
 	m_stageSuuji = new CSuuji(CSystemPicture::GetSystemPicture("ta_stageSuuji"),64,64,1);
+	m_tama = new CPutChara("sys\\ta_tama",2,2);
 
 	CreateBackButton();
 	m_back->SetCancelButtonFlag(FALSE);
@@ -263,6 +264,7 @@ void CPlay::End(void)
 	ENDDELETECLASS(m_dropButton);
 	ENDDELETECLASS(m_useButton);
 
+	ENDDELETECLASS(m_tama);
 	ENDDELETECLASS(m_stagePlate);
 	ENDDELETECLASS(m_stageSuuji);
 
@@ -1210,6 +1212,9 @@ void CPlay::AttackEnemy(int pl,int n,int attack,BOOL magic)
 	{
 		attack += m_enchantControl->GetAttack(1-pl);
 		deffense += m_enchantControl->GetDeffense(pl);
+		int worldDeffense = GetDeffenseEffectByWorld();
+		deffense += worldDeffense;
+		if (deffense < 0) deffense = 0;
 	}
 
 
@@ -1665,12 +1670,15 @@ void CPlay::UseItemCard(int pl,int card)
 			{
 				for (int k=0;k<playerNumber;k++)
 				{
-					n++;
-					n %= playerNumber;
 					if (m_battleStatus[pl][n]->m_playerEnemy != -1)
 					{
-						break;
+						if (m_battleStatus[pl][n]->m_hp < m_battleStatus[pl][n]->m_hpMax)
+						{
+							break;
+						}
 					}
+					n++;
+					n %= playerNumber;
 				}
 			}
 
@@ -1942,6 +1950,9 @@ int CPlay::Print(void)
 				int targetPlayer = obj->m_targetPlayer;
 				int targetSerial = obj->m_targetSerial;
 				int targetNumber = obj->m_targetNumber;
+				int pic = 0;
+				if (targetPlayer == 1) pic = 1;
+
 				if (obj->m_type == 0)
 				{
 					float toX = m_baseX[targetPlayer][targetNumber];
@@ -1949,7 +1960,8 @@ int CPlay::Print(void)
 
 					POINT pt = obj->GetPoint(toX,toY);
 
-					CAllGeo::BoxFill(pt.x-3,pt.y-3,7,7,255,64,128);
+					m_tama->Put(pt,0,pic);
+//					CAllGeo::BoxFill(pt.x-3,pt.y-3,7,7,255,64,128);
 				}
 				else
 				{
@@ -1964,7 +1976,8 @@ int CPlay::Print(void)
 	//					int type = obj->m_type;
 
 						//dummy
-						CAllGeo::BoxFill(pt.x-3,pt.y-3,7,7,64,128,255);
+	//					CAllGeo::BoxFill(pt.x-3,pt.y-3,7,7,64,128,255);
+						m_tama->Put(pt,0,pic);
 					}
 				}
 			}
@@ -2452,7 +2465,7 @@ int CPlay::GetSpellEffectByWorld(void)
 	int effect = 0;
 
 	int worldType = m_cardList->GetWorldType(m_worldCard);
-	if (worldType == 2)
+	if (worldType == 3)
 	{
 		effect = m_cardList->GetAttack(m_worldCard);
 	}
@@ -2475,11 +2488,26 @@ int CPlay::GetAttackEffectByWorld(void)
 	return effect;
 }
 
+int CPlay::GetDeffenseEffectByWorld(void)
+{
+	if (m_worldCard == 0) return 0;
+
+	int effect = 0;
+
+	int worldType = m_cardList->GetWorldType(m_worldCard);
+	if (worldType == 2)
+	{
+		effect = m_cardList->GetDeffense(m_worldCard);
+	}
+
+	return effect;
+}
+
 float CPlay::GetWorldSpeedEffect(void)
 {
 	if (m_worldCard == 0) return 1.0f;
 	int worldType = m_cardList->GetWorldType(m_worldCard);
-	if (worldType != 3) return 1.0f;
+	if (worldType != 4) return 1.0f;
 	
 	float f = (float)m_cardList->GetMoveSpeed(m_worldCard);
 	f *= 0.01f;
@@ -2490,7 +2518,7 @@ int CPlay::GetWorldMulti(void)
 {
 	if (m_worldCard == 0) return 1;
 	int worldType = m_cardList->GetWorldType(m_worldCard);
-	if (worldType != 4) return 1;
+	if (worldType != 5) return 1;
 	int m = m_cardList->GetNumbers(m_worldCard);
 	if (m<1) m = 1;//@@
 	return m;

@@ -34,6 +34,7 @@ private:
 	CPutChara* m_rare;
 	CPutChara* m_type;
 	CPutChara* m_cardMana;
+	CPutChara* m_flag;
 
 	CPicture* m_cardBase[4];
 	int m_rarePrintX;
@@ -43,6 +44,9 @@ private:
 	int m_textPrintX;
 	int m_textPrintY;
 	int m_textNextY;
+	int m_plainTextPrintX;
+	int m_plainTextPrintY;
+	int m_plainTextNextY;
 	int m_typePrintX;
 	int m_typePrintY;
 	int m_cardManaPrintX;
@@ -51,6 +55,9 @@ private:
 	int m_etcPrintX;
 	int m_etcPrintY;
 	int m_etcNextX;
+	int m_flagPrintX;
+	int m_flagPrintY;
+	int m_flagNextX;
 
 };
 

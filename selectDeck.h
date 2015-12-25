@@ -12,6 +12,7 @@ class CMyMessage;
 class CNameList;
 
 class CDeckData;
+class CSuuji;
 
 class CSelectDeck : public CCommonGeneral
 {
@@ -52,7 +53,7 @@ protected:
 	BOOL CheckOnDeck(int n,POINT pt);
 
 	CDeckData* m_deckData;
-
+	CSuuji* m_suuji;
 
 };
 

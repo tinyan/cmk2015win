@@ -49,6 +49,7 @@ LPSTR CCardList::m_errorName = "ƒGƒ‰[";
 #define PARAM_ITEMPIC 23
 
 #define PARAM_CARDTEXT 24
+#define PARAM_CARDPLANETEXT 28
 #define PARAM_MINICARDNUMBER 30
 #define PARAM_CARDFILENAME 31
 
@@ -168,10 +169,17 @@ LPSTR CCardList::GetFilename(int card)
 	return m_list->GetName(n * m_paramNumber + PARAM_CARDFILENAME);
 }
 
+
 LPSTR CCardList::GetText(int card,int k)
 {
 	int n = CardToNumber(card);
 	return m_list->GetName(n * m_paramNumber + PARAM_CARDTEXT + k);
+}
+
+LPSTR CCardList::GetPlainText(int card,int k)
+{
+	int n = CardToNumber(card);
+	return m_list->GetName(n * m_paramNumber + PARAM_CARDPLANETEXT + k);
 }
 
 int CCardList::GetNeedMana(int card,int manaType)
@@ -293,7 +301,17 @@ int CCardList::GetItemType(int card)
 LPSTR CCardList::GetEtcMes(int card)
 {
 	int type = GetType(card);
-	if (type == 2)
+	if (type == 1)
+	{
+		int getMana = 0;
+		for (int i=0;i<8;i++)
+		{
+			getMana += GetLandPower(card,i);
+		}
+		sprintf_s(m_etcMes,256,"%d",getMana);
+		return m_etcMes;
+	}
+	else if (type == 2)
 	{
 		int attack = GetAttack(card);
 		int deffense = GetDeffense(card);
@@ -317,9 +335,90 @@ LPSTR CCardList::GetEtcMes(int card)
 		
 		if (param != 0)
 		{
+			if (param < 0) param *= -1;
 			sprintf_s(m_etcMes,256,"%d",param);
 			return m_etcMes;
 		}
+	}
+	else if (type == 4)
+	{
+		int itemType = GetItemType(card);
+		if (itemType == 0)
+		{
+			int param = GetHP(card);
+			sprintf_s(m_etcMes,256,"%d",param);
+			return m_etcMes;
+		}
+	}
+	else if (type == 5)
+	{
+		int spellType = GetSpellType(card);
+		if (spellType == 0)
+		{
+			int param = GetAttack(card);
+			sprintf_s(m_etcMes,256,"%d",param);
+			return m_etcMes;
+		}
+	}
+	else if (type == 6)
+	{
+		int enchantType = GetEnchantType(card);
+		int param = 0;
+		if (enchantType == 1)
+		{
+			param = GetAttack(card);
+		}
+		else if (enchantType == 2)
+		{
+			param = GetDeffense(card);
+		}
+
+		if (param != 0)
+		{
+			if (param < 0) param *= -1;
+			sprintf_s(m_etcMes,256,"%d",param);
+			return m_etcMes;
+		}
+
+	}
+	else if (type == 7)
+	{
+		int worldType = GetWorldType(card);
+		int param = 0;
+		if (worldType == 1)
+		{
+			param = GetAttack(card);
+		}
+		else if (worldType == 2)
+		{
+			param = GetDeffense(card);
+		}
+		else if (worldType == 3)
+		{
+			param = GetAttack(card);
+		}
+		else if (worldType == 4)
+		{
+			param = GetMoveSpeed(card);
+		}
+		else if (worldType == 5)
+		{
+			param = GetNumbers(card);
+		}
+		if (param != 0)
+		{
+			if (param < 0) param *= -1;
+			if (worldType == 4)
+			{
+				sprintf_s(m_etcMes,256,"%d%%",param);
+			}
+			else
+			{
+				sprintf_s(m_etcMes,256,"%d",param);
+			}
+			return m_etcMes;
+		}
+
 	}
 
 	return NULL;

@@ -74,6 +74,11 @@ void CDamageSuuji::AddSuuji(int x,int y,int d,int col)
 
 	}
 
+	if (col == 2)
+	{
+		countMax = 3000;
+		countSpeed = 100;
+	}
 
 	m_work[n].flag = TRUE;
 	m_work[n].count = 0;

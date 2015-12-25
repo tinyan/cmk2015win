@@ -58,6 +58,8 @@ private:
 	CPutChara* m_stagePic;
 	CPutChara* m_subMark;
 	int m_existStage;
+	int m_scrollX;
+	int m_scrollY;
 };
 
 

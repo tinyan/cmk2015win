@@ -119,6 +119,7 @@ int CGameTitle::Init(void)
 
 	m_menu->Init();
 
+	m_commonParts->LoadDWQ("sys\\ta_title_bg");
 	return -1;
 }
 
@@ -188,9 +189,10 @@ int CGameTitle::Print(void)
 {
 	CAreaControl::SetNextAllPrint();
 
-	CAllGraphics::FillScreen();
+//	CAllGraphics::FillScreen();
 
-	m_message->PrintMessage(10,10,"タイトル画面");
+//	m_message->PrintMessage(10,10,"タイトル画面");
+	m_commonParts->Put(0,0,FALSE);
 
 	m_menu->Print(TRUE);
 
