@@ -16,6 +16,12 @@ CPutPeople::CPutPeople()
 
 	m_peopleAnime = 0;
 	m_itemAnime = 0;
+
+	m_peopleDeltaX = 0;
+	m_peopleDeltaY = 0;
+	m_itemDeltaX = 0;
+	m_itemDeltaY = 0;
+	m_peopleAnimePattern = 0;
 }
 
 CPutPeople::~CPutPeople()
@@ -35,9 +41,9 @@ void CPutPeople::End(void)
 
 void CPutPeople::Put(int x,int y,int type,int pic,int houkou)
 {
-	int anime = 0;
+	int anime = m_peopleAnimePattern;
 
-	m_people[type]->Put(x,y,anime,pic);
+	m_people[type]->Put(x+m_peopleDeltaX,y+m_peopleDeltaY,anime,pic);
 }
 
 
@@ -50,7 +56,7 @@ void CPutPeople::PutItem(int x,int y,int pl,int type,int item,int houkou)
 
 	if (item != -1)
 	{
-		m_equipPic->Put(x,y,pl,item,type,houkou);
+		m_equipPic->Put(x+m_itemDeltaX,y+m_itemDeltaY,pl,item,type,houkou);
 	}
 }
 
@@ -58,6 +64,22 @@ void CPutPeople::PutLife(int x,int y,int type,int life,int lifeMax)
 {
 }
 
+void CPutPeople::CalcuAnime(void)
+{
+	m_peopleAnime++;
+	m_peopleAnime %= 32;
+	m_itemAnime++;
+	m_itemAnime %= 40;
+
+	int p1 = m_peopleAnime / 8;
+	int p2 = m_itemAnime / 10;
+	int table1[] = {0,1,0,-1};
+	int table2[] = {0,1,0,-1};
+
+	m_peopleAnimePattern = p1;
+//	m_peopleDeltaY = table1[p1];
+	m_itemDeltaY = table2[p2];
+}
 
 
 

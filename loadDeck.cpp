@@ -70,6 +70,7 @@ CLoadDeck::CLoadDeck(CGame* lpGame) : CSelectDeck(lpGame,0)
 	LoadSetupFile("loaddeck",256);
 
 	CreateBackButton();
+	GetFadeInOutSetup();
 
 }
 

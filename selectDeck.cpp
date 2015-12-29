@@ -80,6 +80,7 @@ CSelectDeck::CSelectDeck(CGame* lpGame,int loadsave) : CCommonGeneral(lpGame)
 	m_deckSizeY = 64;
 
 	m_suuji = new CSuuji(CSystemPicture::GetSystemPicture("ta_selectdeck_number"),64,64,1);
+
 }
 
 CSelectDeck::~CSelectDeck()
@@ -169,6 +170,8 @@ int CSelectDeck::Calcu(void)
 		{
 			if (m_enableFlag[m_onNumber])
 			{
+				m_game->PlaySystemSound(0);
+
 				if (m_loadsave == 0)
 				{
 					return ReturnFadeOut(ProcessLoad());

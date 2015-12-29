@@ -111,6 +111,7 @@
     <ClCompile Include="saveDeck.cpp" />
     <ClCompile Include="selectDeck.cpp" />
     <ClCompile Include="selectStage.cpp" />
+    <ClCompile Include="soundControl.cpp" />
     <ClCompile Include="stageData.cpp" />
     <ClCompile Include="unit.cpp" />
   </ItemGroup>
@@ -144,6 +145,7 @@
     <ClInclude Include="saveDeck.h" />
     <ClInclude Include="selectDeck.h" />
     <ClInclude Include="selectStage.h" />
+    <ClInclude Include="soundControl.h" />
     <ClInclude Include="stageData.h" />
     <ClInclude Include="unit.h" />
   </ItemGroup>

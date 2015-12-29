@@ -14,6 +14,9 @@ class CNameList;
 class CMenuButtonSetup;
 class CMenuButtonGroup;
 
+class CPutChara;
+
+
 class CGameTitle : public CCommonGeneral
 {
 public:
@@ -37,6 +40,17 @@ private:
 	CMenuButtonSetup* m_menuButtonSetup;
 	CMenuButtonGroup* m_menu;
 
+	CPutChara* m_nekoashiPic;
+
+	int m_nekoCount;
+	float m_nekoX;
+	float m_nekoY;
+	float m_nekoHoukou;
+	float m_nekoKasoku;
+
+	float m_nekoZahyo[6*2];
+	float m_nekoMuki[6];
+	int m_nekoPointer;
 };
 
 

@@ -9,7 +9,13 @@ public:
 	~CSoundControl();
 	void End(void);
 
+	void Clear(void);
+	void AddSound(int type);
+	int GetSound(int type);
+
 private:
+	int m_sound[64];
+
 };
 
 #endif

@@ -29,6 +29,7 @@ class CDamageSuuji;
 class CPrintDamageEffect;
 class CEnchantControl;
 class CStageData;
+class CSoundControl;
 
 class CAttackObjectControl;
 
@@ -72,6 +73,7 @@ private:
 	CPutChara* m_hqPic;
 	CEnchantControl* m_enchantControl;
 	CStageData* m_stageData;
+	CSoundControl* m_soundControl;
 
 
 	int m_playMode;
@@ -162,7 +164,7 @@ private:
 	int GetRandomItem(int pl);
 
 	BOOL CheckInRangeBase(int pl,int n,int pl2,int n2 = 0);
-	void AttackBase(int pl,int n,int pl2,int n2 = 0);
+	void AttackBase(int pl,int n,int pl2,int n2 = 0,BOOL enemyExistFlag = TRUE);
 
 	float m_baseX[2][1];
 	float m_baseY[2][1];
@@ -205,6 +207,8 @@ private:
 
 	CSuuji* m_stageSuuji;
 	CPicture* m_stagePlate;
+
+	BOOL GetEnemyExistFlag(int pl);
 
 	void PrintHelpCard(void);
 	static char m_enchantTypeMessage[3][64];

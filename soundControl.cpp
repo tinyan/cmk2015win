@@ -2,22 +2,41 @@
 
 #include "..\..\systemNNN\nyanlib\include\commonMacro.h"
 
-#include "..\..\SystemNNN\nnnUtilLib\\waveData.h"
-
 
 #include "soundControl.h"
 
-CDummy::CDummy()
+CSoundControl::CSoundControl()
 {
+	Clear();
 }
 
-CDummy::~CDummy()
+CSoundControl::~CSoundControl()
 {
 	End();
 }
 
-void CDummy::End(void)
+void CSoundControl::End(void)
 {
+}
+
+void CSoundControl::Clear(void)
+{
+	for (int i=0;i<64;i++)
+	{
+		m_sound[i] = 0;
+	}
+}
+
+void CSoundControl::AddSound(int type)
+{
+	if ((type < 0) || (type >= 64)) return;
+	m_sound[type]++;
+}
+
+int CSoundControl::GetSound(int type)
+{
+	if ((type < 0) || (type >= 64)) return 0;
+	return m_sound[type];
 }
 
 

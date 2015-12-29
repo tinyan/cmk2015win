@@ -122,6 +122,9 @@ CEditDeck::CEditDeck(CGame* lpGame) : CCommonGeneral(lpGame)
 	CreateUpDownBack();
 
 	m_saveButton->SetPicture(CSuperButtonPicture::GetPicture(3));
+
+	GetFadeInOutSetup();
+
 }
 
 CEditDeck::~CEditDeck()
@@ -156,6 +159,9 @@ int CEditDeck::Init(void)
 
 	m_captureCard = -1;
 
+	m_commonParts->LoadDWQ("sys\\ta_editdeck_bg");
+	m_bgCount = 0;
+
 	return -1;
 }
 
@@ -166,10 +172,10 @@ int CEditDeck::Calcu(void)
 
 	POINT pt = m_mouseStatus->GetZahyo();
 
-	if (m_mouseStatus->CheckClick(1))
-	{
-		return ReturnFadeOut(GAMETITLE_MODE);
-	}
+//	if (m_mouseStatus->CheckClick(1))
+//	{
+//		return ReturnFadeOut(GAMETITLE_MODE);
+//	}
 
 	GetOnArea(pt);
 
@@ -211,20 +217,24 @@ int CEditDeck::Calcu(void)
 						}
 					}
 					m_captureCard = -1;
+					PlaySetCardSound();
 				}
 				else
 				{
 					Modosu();
+					PlayModosuSound();
 				}
 			}
 			else if (m_onAreaType == 1)
 			{
 				AddUsed(m_captureCard,-1);
 				m_captureCard = -1;
+				PlayModosuSound();
 			}
 			else
 			{
 				Modosu();
+				PlayModosuSound();
 			}
 		}
 
@@ -245,6 +255,7 @@ int CEditDeck::Calcu(void)
 					m_captureCard = card;
 					m_deckData->SetCard(m_onAreaNumber,0);
 					m_largeCardPrintCount = 300;
+					PlayCaptureSound();
 				}
 			}
 		}
@@ -264,6 +275,7 @@ int CEditDeck::Calcu(void)
 							m_captureFromPlace = m_onAreaNumber;
 							AddUsed(m_captureCard);
 							m_largeCardPrintCount = 300;
+							PlayCaptureSound();
 						}
 					}
 				}
@@ -331,13 +343,18 @@ int CEditDeck::Print(void)
 {
 	CAreaControl::SetNextAllPrint();
 
-	CAllGraphics::FillScreen();
+	m_bgCount++;
+	m_bgCount %= 960;
+	m_commonParts->Put(0,m_bgCount-960,FALSE);
+	m_commonParts->Put(0,m_bgCount,FALSE);
 
-	m_message->PrintMessage(10,10,"エディット画面");
+//	CAllGraphics::FillScreen();
 
-	char mes[256];
-	sprintf_s(mes,256,"エリア：%d　オン：%d",m_onAreaType,m_onAreaNumber);
-	m_message->PrintMessage(10,30,mes);
+//	m_message->PrintMessage(10,10,"エディット画面");
+
+	//char mes[256];
+	//sprintf_s(mes,256,"エリア：%d　オン：%d",m_onAreaType,m_onAreaNumber);
+	//m_message->PrintMessage(10,30,mes);
 
 
 	for (int j=0;j<m_deckCardPrintNumberY;j++)
@@ -609,6 +626,20 @@ int CEditDeck::GetOnBase(POINT pt)
 	return n;
 }
 
+void CEditDeck::PlaySetCardSound(void)
+{
+	m_game->PlaySystemSound(5-1);
+}
+
+void CEditDeck::PlayModosuSound(void)
+{
+	m_game->PlaySystemSound(2-1);
+}
+
+void CEditDeck::PlayCaptureSound(void)
+{
+	m_game->PlaySystemSound(1-1);
+}
 
 /*_*/
 

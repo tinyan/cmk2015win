@@ -97,7 +97,14 @@ private:
 
 	void Modosu(void);
 
+	int m_bgCount;
+
 	int m_largeCardPrintCount;
+
+	void PlaySetCardSound(void);
+	void PlayModosuSound(void);
+	void PlayCaptureSound(void);
+
 };
 
 

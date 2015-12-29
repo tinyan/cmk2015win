@@ -82,10 +82,12 @@ CSelectStage::CSelectStage(CGame* lpGame) : CCommonGeneral(lpGame)
 
 	m_stagePrintX = 270;
 	m_stagePrintY = 100;
-	m_stageSizeX = 400;
+	m_stageSizeX = 384;
 	m_stageSizeY = 64;
 	m_stageNextX = 0;
 	m_stageNextY = 120;
+
+	GetFadeInOutSetup();
 
 	m_stagePic = new CPutChara("sys\\ta_selectStage_stage",2,4);
 	m_subMark = new CPutChara("sys\\ta_selectStage_submark",2,1);
@@ -169,6 +171,7 @@ int CSelectStage::Calcu(void)
 				m_stage = m_onNumber;
 				m_subStage = 0;
 				m_game2->SetStage(m_stage,m_subStage);
+				m_game->PlaySystemSound(0);
 				return ReturnFadeOut(PLAY_MODE);
 			}
 		}
@@ -225,7 +228,7 @@ int CSelectStage::Print(void)
 		for (int k=0;k<subStageNumber;k++)
 		{
 			int x = pt.x + 40 + 40 * k;
-			int y = pt.y + 40;
+			int y = pt.y + 50;
 			int md = 0;
 			if (m_clearData->GetData(stage,k) > 0) md = 1;
 			m_subMark->Put(x,y,md,0);

@@ -23,6 +23,8 @@ LPSTR CCardList::m_errorName = "ÉGÉâÅ[";
 #define PARAM_OCCUPY 15
 #define PARAM_WEAPONSPEED 16
 #define PARAM_MOVESPEED 17
+#define PARAM_HIGHSPEED 18
+#define PARAM_CARDSOUND 19
 #define PARAM_NUMBERS 20
 
 //land
@@ -268,6 +270,11 @@ int CCardList::GetMoveSpeed(int card)
 	return GetParamData(card,PARAM_MOVESPEED);
 }
 
+int CCardList::GetHighSpeed(int card)
+{
+	return GetParamData(card,PARAM_HIGHSPEED);
+}
+
 int CCardList::GetRare(int card)
 {
 	return GetParamData(card,PARAM_RARE);
@@ -296,6 +303,11 @@ int CCardList::GetSpellType(int card)
 int CCardList::GetItemType(int card)
 {
 	return GetParamData(card,PARAM_ITEMTYPE);
+}
+
+int CCardList::GetSound(int card)
+{
+	return GetParamData(card,PARAM_CARDSOUND);
 }
 
 LPSTR CCardList::GetEtcMes(int card)
@@ -364,11 +376,11 @@ LPSTR CCardList::GetEtcMes(int card)
 	{
 		int enchantType = GetEnchantType(card);
 		int param = 0;
-		if (enchantType == 1)
+		if ((enchantType == 1) || (enchantType == -1))
 		{
 			param = GetAttack(card);
 		}
-		else if (enchantType == 2)
+		else if ((enchantType == 2) || (enchantType == -2))
 		{
 			param = GetDeffense(card);
 		}

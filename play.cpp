@@ -75,6 +75,7 @@
 #include "attackObjectControl.h"
 #include "enchantControl.h"
 
+#include "soundControl.h"
 
 #include "play.h"
 #include "game.h"
@@ -88,6 +89,15 @@
 
 #define USECARD_MODE 5
 #define START_MODE 6
+
+
+
+
+#define DAMAGE_SOUND 10
+#define ENEMYDAMAGE_SOUND 11
+#define TURN_SOUND 14
+#define SELECTCARD_SOUND 15
+#define GETITEM_SOUND 16
 
 
 char CPlay::m_enchantTypeMessage[3][64]=
@@ -109,6 +119,7 @@ CPlay::CPlay(CGame* lpGame) : CCommonGeneral(lpGame)
 	m_cardList = m_game2->GetCardList();
 	m_stageData = m_game2->GetStageData();
 
+	m_soundControl = new CSoundControl();
 	
 	m_hexArea = new CHexArea();
 	m_damageSuuji = new CDamageSuuji();
@@ -211,6 +222,8 @@ CPlay::CPlay(CGame* lpGame) : CCommonGeneral(lpGame)
 
 	m_worldCardPrintX = 500;
 	m_worldCardPrintY = 480;
+	GetFadeInOutSetup();
+
 }
 
 
@@ -273,6 +286,8 @@ void CPlay::End(void)
 	ENDDELETECLASS(m_printDamageEffect);
 	ENDDELETECLASS(m_damageSuuji);
 	ENDDELETECLASS(m_hexArea);
+
+	ENDDELETECLASS(m_soundControl);
 }
 
 
@@ -436,6 +451,10 @@ int CPlay::Init(void)
 	LoadBackButtonPic();
 	m_back->Init();
 
+	m_soundControl->Clear();
+
+	m_game->PlaySystemSound(17-1);
+
 	return -1;
 }
 
@@ -443,6 +462,7 @@ int CPlay::Init(void)
 
 int CPlay::Calcu(void)
 {
+	m_soundControl->Clear();
 
 	m_helpCard = 0;
 
@@ -453,6 +473,7 @@ int CPlay::Calcu(void)
 	if (m_mouseStatus->CheckClick(2))
 	{
 #if _DEBUG
+//		StartGameover();
 		StartClear();
 #endif
 
@@ -534,6 +555,8 @@ int CPlay::CalcuPlayMode(void)
 					m_useButton->SetEnable(FALSE);
 				}
 				ClearButton();
+
+				m_game->PlaySystemSound(SELECTCARD_SOUND-1);
 
 				m_playMode = USECARD_MODE;
 				return -1;
@@ -664,6 +687,18 @@ int CPlay::CalcuPlayMode(void)
 
 
 	DeleteLastEmpty();
+
+	int soundPlay = 0;
+	for (int i=0;i<64;i++)
+	{
+		int sound = m_soundControl->GetSound(i);
+		if (sound > 0)
+		{
+			m_game->PlaySystemSound(i-1);
+			soundPlay++;
+			if (soundPlay >= 2) break;
+		}
+	}
 
 	return -1;
 }
@@ -893,6 +928,7 @@ void CPlay::GetLandPower(void)
 			m_landTimer[i]->SetTimer(0);
 			HealMana(i);
 			DrawCard(i);
+			m_soundControl->AddSound(TURN_SOUND);
 		}
 	}
 }
@@ -923,6 +959,11 @@ void CPlay::MovePeople(void)
 {
 	for (int pl=0;pl<2;pl++)
 	{
+		//check enemy card and people
+
+		int enemyExistFlag = GetEnemyExistFlag(pl);
+
+
 		for (int i=0;i<m_battleStatusNumber[pl];i++)
 		{
 			CBattleStatus* people = m_battleStatus[pl][i];
@@ -988,27 +1029,48 @@ void CPlay::MovePeople(void)
 						speed *= m_tikeiSpeed[type];
 					}
 					int pw = m_hexArea->GetPower(hexBlock.x,hexBlock.y);
-					if (pl == 0)
+
+
+					float churitsu = 0.3f;
+					float enemyarea = 0.15f;
+
+					if (people->m_highSpeed > 0)
 					{
-						if (pw<10000)
+						float ms = (float)people->m_highSpeed;
+						ms /= 100.0f;
+
+						churitsu *= ms;
+						enemyarea *= ms;
+					}
+
+					if (enemyExistFlag)
+					{
+						if (pl == 0)
 						{
-							speed = 0.3f;
+							if (pw <= -10000)
+							{
+								speed = enemyarea;
+							}
+							else if (pw<10000)
+							{
+								speed = churitsu;
+							}
 						}
-						else if (pw <= -10000)
+						else if (pl == 1)
 						{
-							speed = 0.05f;
+							if (pw >= 10000)
+							{
+								speed = enemyarea;
+							}
+							else if (pw>=-10000)
+							{
+								speed = churitsu;
+							}
 						}
 					}
-					else if (pl == 1)
+					else
 					{
-						if (pw>=-10000)
-						{
-							speed = 0.3f;
-						}
-						else if (pw >= 10000)
-						{
-							speed = 0.05f;
-						}
+						speed *= 3.0f;
 					}
 
 
@@ -1081,7 +1143,7 @@ void CPlay::MovePeople(void)
 
 void CPlay::GetItemRoutine(int pl,int n)
 {
-	OutputDebugString("\x00d\x00a *** GET ITEM ***");
+//	OutputDebugString("\x00d\x00a *** GET ITEM ***");
 	CBattleStatus* people = m_battleStatus[pl][n];
 	int targetItemNumber = people->m_targetItemNumber;
 	int targetSerial = people->m_targetItemSerial;
@@ -1102,6 +1164,8 @@ void CPlay::GetItemRoutine(int pl,int n)
 			people->m_targetType = -1;
 			people->m_targetItemNumber = -1;
 			people->m_targetNumber = -1;
+
+			m_soundControl->AddSound(GETITEM_SOUND);
 		}
 	}
 }
@@ -1111,6 +1175,8 @@ void CPlay::Attack(void)
 {
 	for (int pl=0;pl<2;pl++)
 	{
+		int enemyExistFlag = GetEnemyExistFlag(pl);
+
 		for (int i=0;i<m_battleStatusNumber[pl];i++)
 		{
 			CBattleStatus* people = m_battleStatus[pl][i];
@@ -1131,7 +1197,7 @@ void CPlay::Attack(void)
 					{
 						if (CheckInRangeBase(pl,i,1-pl,0))
 						{
-							AttackBase(pl,i,1-pl,0);
+							AttackBase(pl,i,1-pl,0,enemyExistFlag);
 						}
 					}
 					else if (targetType == 1)
@@ -1153,10 +1219,26 @@ void CPlay::Attack(void)
 }
 
 
-void CPlay::AttackBase(int pl,int n,int pl2,int n2)
+void CPlay::AttackBase(int pl,int n,int pl2,int n2,BOOL enemyExistFlag)
 {
 	CBattleStatus* people = m_battleStatus[pl][n];
 	int attack = people->m_attack;
+
+	int worldAttack = GetAttackEffectByWorld();
+	attack += worldAttack;
+
+
+	attack += m_enchantControl->GetAttack(pl);
+
+	if (attack < 1) attack = 1;
+
+
+
+
+	if (!enemyExistFlag)
+	{
+		attack *= 5;
+	}
 
 	CAttackObject* obj = m_attackObjectControl->SearchAki();
 	if (obj != NULL)
@@ -1247,7 +1329,16 @@ void CPlay::AttackEnemy(int pl,int n,int attack,BOOL magic)
 	m_printDamageEffect->AddDamage(putX,putY,pl);
 
 	putY -= 32;
-	m_damageSuuji->AddSuuji(putX,putY,damage,pl);
+	m_damageSuuji->AddSuuji(putX,putY,damage,pl,magic);
+
+	if (pl == 0)
+	{
+		m_soundControl->AddSound(DAMAGE_SOUND);
+	}
+	else
+	{
+		m_soundControl->AddSound(ENEMYDAMAGE_SOUND);
+	}
 }
 
 void CPlay::MoveAttackObject(void)
@@ -1306,6 +1397,14 @@ void CPlay::DamageBase(int pl,int n,int attack)
 	putY -= 32;
 	m_damageSuuji->AddSuuji(putX,putY,attack,pl);
 
+	if (pl == 0)
+	{
+		m_soundControl->AddSound(DAMAGE_SOUND);
+	}
+	else
+	{
+		m_soundControl->AddSound(ENEMYDAMAGE_SOUND);
+	}
 
 
 	if (m_hqHP[pl][n] <= 0)
@@ -1449,6 +1548,11 @@ void CPlay::UseCardRoutine(int pl,int place)
 	//mana
 	UseMana(pl,card);
 
+	int sound = m_cardList->GetSound(card);
+	if (sound > 0)
+	{
+		m_game->PlaySystemSound(sound-1);
+	}
 
 	//use
 	int type = m_cardList->GetType(card);
@@ -1551,6 +1655,7 @@ void CPlay::UsePeopleCard(int pl,int card)
 		int deffense = m_cardList->GetDeffense(card);
 		int occupy = m_cardList->GetOccupy(card);
 		int weaponSpeed = m_cardList->GetWeaponSpeed(card);
+		int highSpeed = m_cardList->GetHighSpeed(card);
 
 		attackSpeed *= (80 + rand() % 40);
 		attackSpeed /= 100;
@@ -1572,6 +1677,7 @@ void CPlay::UsePeopleCard(int pl,int card)
 		people->m_attackCount = 0;
 		people->m_occupyPower = occupy;
 		people->m_weaponSpeed = weaponSpeed;
+		people->m_highSpeed = highSpeed;
 		people->CalcuStatus(m_cardList);
 	}
 }
@@ -1874,9 +1980,9 @@ int CPlay::Print(void)
 
 	if (1)
 	{
-		char mes[256];
-		sprintf_s(mes,256,"%d：%d",m_debugPower[0],m_debugPower[1]);
-		m_message->PrintMessage(0,0,mes);
+//		char mes[256];
+//		sprintf_s(mes,256,"%d：%d",m_debugPower[0],m_debugPower[1]);
+//		m_message->PrintMessage(0,0,mes);
 	}
 
 
@@ -1897,7 +2003,7 @@ int CPlay::Print(void)
 		}
 	}
 
-
+	m_putPeople->CalcuAnime();
 	for (int pl=0;pl<2;pl++)
 	{
 		for (int i=0;i<m_battleStatusNumber[pl];i++)
@@ -2091,8 +2197,45 @@ int CPlay::Print(void)
 		if (m_lastCount < 100)
 		{
 			int ps = (m_lastCount * 100) / 100;
+			int dx = 0;
+			int dy = 0;
 
-			m_commonParts->TransLucentBlt2(270-128,480-128,0,0,256,256,ps);
+			if (m_playMode == GAMEOVER_MODE)
+			{
+				int limit = 80;
+				if (m_lastCount >= limit)
+				{
+					int c = (100-limit)/2;
+
+					int t = m_lastCount - limit;
+					int h = 50;
+					dy = -h * (t-c) * (t-c) / (c*c) + h;
+					dy *= -1;
+
+				}
+				else
+				{
+					int c = limit;
+					int t = m_lastCount;
+					int h = 700;
+					dy = -h * t * t / (c*c) + h;
+					dy *= -1;
+
+				}
+//				if (m_lastCount < 100)
+//				{
+//					char mes[256];
+//					sprintf_s(mes,256,"%d %d\x00d\x00a",m_lastCount,dy);
+//					OutputDebugString(mes);
+//				}
+			}
+			else
+			{
+				dx = (100 - m_lastCount) * 3;
+			}
+
+
+			m_commonParts->TransLucentBlt2(270-128 + dx,480-128 + dy,0,0,256,256,ps);
 		}
 		else
 		{
@@ -2247,7 +2390,7 @@ void CPlay::UseMana(int pl,int card)
 	}
 
 	//error!!
-	OutputDebugString("*** ERROR マナ不足 ***");
+//	OutputDebugString("*** ERROR マナ不足 ***");
 }
 
 
@@ -2414,23 +2557,27 @@ void CPlay::CheckTargetExist(void)
 
 void CPlay::StartGameover(void)
 {
-	if (m_playMode != STAGECLEAR_MODE)
+	if ((m_playMode != STAGECLEAR_MODE) && (m_playMode != GAMEOVER_MODE))
 	{
 		m_playMode = GAMEOVER_MODE;
 		m_commonParts->LoadDWQ("sys\\ta_play_lose");
 		m_lastCount = 0;
+		m_game->PlaySystemSound(19-1);
+		m_soundControl->Clear();
 	}
 }
 
 void CPlay::StartClear(void)
 {
-	if (m_playMode != GAMEOVER_MODE)
+	if ((m_playMode != STAGECLEAR_MODE) && (m_playMode != GAMEOVER_MODE))
 	{
 		m_game2->ClearStage(m_stageNumber,m_stageSubNumber);
 
 		m_playMode = STAGECLEAR_MODE;
 		m_commonParts->LoadDWQ("sys\\ta_play_win");
 		m_lastCount = 0;
+		m_game->PlaySystemSound(18-1);
+		m_soundControl->Clear();
 	}
 }
 
@@ -2566,6 +2713,46 @@ void CPlay::PrintHelpCard(void)
 
 
 	}
+}
+
+BOOL CPlay::GetEnemyExistFlag(int pl)
+{
+	BOOL enemyExistFlag = FALSE;
+	for (int i=0;i<m_battleStatusNumber[1-pl];i++)
+	{
+		CBattleStatus* people = m_battleStatus[1-pl][i];
+		if (people->m_playerEnemy != -1)
+		{
+			enemyExistFlag = TRUE;
+			break;
+		}
+	}
+
+	if (!enemyExistFlag)
+	{
+		for (int i=0;i<m_placeMax;i++)
+		{
+			if (m_hand[1-pl][i] > 0)
+			{
+				enemyExistFlag = TRUE;
+				break;
+			}
+		}
+	}
+
+	if (!enemyExistFlag)
+	{
+		for (int i=0;i<m_placeMax;i++)
+		{
+			if (m_yamaPointer[1-pl] < m_yamaMax[1-pl])
+			{
+				enemyExistFlag = TRUE;
+				break;
+			}
+		}
+	}
+
+	return enemyExistFlag;
 }
 
 /*_*/

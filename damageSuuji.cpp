@@ -45,7 +45,7 @@ void CDamageSuuji::AllClear(void)
 	}
 }
 
-void CDamageSuuji::AddSuuji(int x,int y,int d,int col)
+void CDamageSuuji::AddSuuji(int x,int y,int d,int col,BOOL magic)
 {
 	int n = SearchAki();
 	if (n == -1)
@@ -77,7 +77,13 @@ void CDamageSuuji::AddSuuji(int x,int y,int d,int col)
 	if (col == 2)
 	{
 		countMax = 3000;
-		countSpeed = 100;
+		countSpeed = 50;
+	}
+
+	if (magic)
+	{
+		countMax = 3000;
+		countSpeed = 50;
 	}
 
 	m_work[n].flag = TRUE;

@@ -21,6 +21,11 @@ private:
 	CPutChara* m_people[2];
 	int m_peopleAnime;
 	int m_itemAnime;
+	int m_peopleDeltaX;
+	int m_peopleDeltaY;
+	int m_itemDeltaX;
+	int m_itemDeltaY;
+	int m_peopleAnimePattern;
 
 	CPutEquip* m_equipPic;
 };

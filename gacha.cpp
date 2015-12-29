@@ -79,6 +79,9 @@ CGacha::CGacha(CGame* lpGame) : CCommonGeneral(lpGame)
 
 	m_star = new CPutChara("sys\\ta_star",1,1);
 	m_getPic = new CPicture("sys\\ta_gacha_get");
+
+	GetFadeInOutSetup();
+
 }
 
 
@@ -107,6 +110,9 @@ int CGacha::Init(void)
 
 	m_commonParts->LoadDWQ("sys\\ta_gacha_back");
 	m_count = 0;
+
+	m_game->PlaySystemSound(20-1);
+
 	return -1;
 }
 

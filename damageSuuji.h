@@ -12,7 +12,7 @@ public:
 	void End(void);
 
 	void AllClear(void);
-	void AddSuuji(int x,int y,int d,int col = 0);
+	void AddSuuji(int x,int y,int d,int col = 0,BOOL magic = FALSE);
 	void Calcu(int cnt = 1);
 	void Print(void);
 

@@ -40,6 +40,9 @@ public:
 	int GetEnchantType(int card);
 	int GetSpellType(int card);
 	int GetItemType(int card);
+	int GetHighSpeed(int card);
+
+	int GetSound(int card);
 
 	static LPSTR m_errorName;
 private:

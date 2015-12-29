@@ -35,6 +35,7 @@ void CBattleStatus::Clear(void)
 	m_fromNumber = -1;
 	m_fromSerial = -1;
 	m_weaponSpeed = 5;
+	m_highSpeed = 0;
 }
 
 void CBattleStatus::NewSerial(void)

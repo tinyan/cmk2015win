@@ -29,6 +29,7 @@ public:
 	int m_attackCount;
 	int m_occupyPower;
 	int m_weaponSpeed;
+	int m_highSpeed;
 
 	int m_attack;
 	int m_deffense;

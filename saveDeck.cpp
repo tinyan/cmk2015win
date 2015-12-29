@@ -70,6 +70,7 @@ CSaveDeck::CSaveDeck(CGame* lpGame) : CSelectDeck(lpGame,1)
 	LoadSetupFile("savedeck",256);
 
 	CreateBackButton();
+	GetFadeInOutSetup();
 
 }
 
